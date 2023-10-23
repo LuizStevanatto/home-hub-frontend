@@ -22,7 +22,7 @@ interface IFormLogin {
 }
 
 export interface ILoginResponse {
-	token: string;
+	accessToken: string;
 	user: IUser;
 }
 
@@ -43,9 +43,10 @@ function FormLogin() {
 		setIsLoading(true);
 
 		try {
-			const resp = await api.post("/sessions", dataLogin);
-			const { token, user }: ILoginResponse = resp.data;
-			setCookie(null, "@webcasas:user_token", token, {
+			const resp = await api.post("/auth/signin", dataLogin);
+			const { accessToken, user }: ILoginResponse = resp.data;
+			console.log(accessToken);
+			setCookie(null, "@homeHub:user_token", accessToken, {
 				maxAge: 86400,
 				path: "/",
 			});
@@ -61,7 +62,7 @@ function FormLogin() {
 					setIsLoginIncorrect(true);
 				} else if (msgAxios == msgErrorAccountDesable) {
 					const { user } = error.response?.data;
-					setCookie(null, "@webcasas:is_activation_user", "true");
+					setCookie(null, "@homeHub:is_activation_user", "true");
 					router.replace(`/active-account/${user.id}`);
 				}
 			}
