@@ -13,15 +13,12 @@ import formEditAccountUserSchema from "@/schemas/formEditAccountUser";
 import FormErrorText from "../Form/FormErrorText";
 import api from "@/services/api";
 import { toast } from "react-toastify";
+import { z } from "zod";
 
-interface IFormEditAccountUser {
-  firstName: string;
-  lastName: string;
-  email: string;
-}
+type IFormEditAccountUser = z.infer<typeof formEditAccountUserSchema>;
 
 function FormEditAccountUser() {
-  const { user, setUser } = useUserStore();
+  const { user, setUser, updateUser } = useUserStore();
   const [isLoading, setIsLoading] = useState(false);
   const tagImgRef = useRef<null | HTMLImageElement>(null);
   const inputAvatarRef = useRef<null | HTMLInputElement>(null);
@@ -53,9 +50,8 @@ function FormEditAccountUser() {
     setIsLoading(true);
 
     try {
-      const resp = await api.patch("/users/", dataUpdate);
+      await updateUser(dataUpdate);
       toast.success("Alterações feitas");
-      setUser(resp.data);
       handleUpdateAvatarUser();
     } catch (error) {
     } finally {

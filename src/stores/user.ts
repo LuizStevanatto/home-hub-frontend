@@ -16,19 +16,32 @@ interface SignUpProps {
   confirm_password?: string
 }
 
+interface UpdateUserProps {
+  firstName: string
+  lastName: string
+  email: string
+}
 
 interface IUseUserStore {
   user: IUser | null;
   setUser: (user: IUser | null) => void;
   signUp: (newUser: SignUpProps) => void
+  updateUser: (credentials: UpdateUserProps) => void;
 }
 
-const useUserStore = create<IUseUserStore>((set) => ({
+const useUserStore = create<IUseUserStore>((set, get) => ({
   user: null,
   setUser: (user: IUser | null) => set({ user }),
 
   async signUp(data: SignUpProps) {
     await api.post('/users/signup', data)
+  },
+
+  async updateUser(data: UpdateUserProps) {
+    const { user } = get()
+
+    const response = await api.patch(`users/${user?.id}`, data)
+    set({ setUser: response.data })
   }
 }));
 
