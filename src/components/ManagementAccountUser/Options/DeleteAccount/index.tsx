@@ -12,22 +12,21 @@ import { useState } from "react";
 import { isAxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { destroyCookie } from "nookies";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import api from "@/services/api";
 import useUserStore from "@/stores/user";
 import FormLabel from "@/components/Form/FormLabel";
 import FormInput from "@/components/Form/FormInput";
 import formDeleteAccountUserSchema from "@/schemas/formDeleteAccountUser";
 import FormErrorText from "@/components/Form/FormErrorText";
+import api from "@/services/api";
 
 interface IFormDeleteAccount {
   password: string;
 }
 
 function DeleteAccount() {
-  const { setUser } = useUserStore();
+  const { deleteUser, user } = useUserStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isPasswordinvalid, setIsPasswordInvalid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,11 +43,14 @@ function DeleteAccount() {
     setIsLoading(true);
 
     try {
-      await api.delete("/users", { data: dataDeleteAccount });
-      destroyCookie(null, "@webcasas:user_token");
-      setUser(null);
-      toast.success("Conta excluida");
-      router.replace("/");
+      const response = await api.delete("/users", { data: dataDeleteAccount });
+
+      if (response.status === 200) {
+        await deleteUser(String(user?.id));
+
+        toast.success("Conta excluida");
+        router.replace("/");
+      }
     } catch (error) {
       if (isAxiosError(error)) {
         const msgForPasswordInvalid = "Password invalid";
