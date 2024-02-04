@@ -16,14 +16,14 @@ const formRegisterSchema = z
 			.trim()
 			.min(6, "Sua senha deve ter no mínimo 6 caracteres")
 			.max(48, "Sua senha deve ter no máximo 48 caracteres"),
-		confirmPassword: string({ required_error: "Confirme sua senha" }).trim(),
+		confirm_password: string({ required_error: "Confirme sua senha" }).trim(),
 	})
-	.superRefine(({ password, confirmPassword }, ctx) => {
-		if (!(password == confirmPassword)) {
+	.superRefine(({ password, confirm_password }, ctx) => {
+		if (!(password == confirm_password)) {
 			ctx.addIssue({
 				code: "custom",
 				message: "As senhas devem ser iguais",
-				path: ["confirmPassword"],
+				path: ["confirm_password"],
 			});
 		}
 	});

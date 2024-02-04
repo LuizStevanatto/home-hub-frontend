@@ -16,107 +16,139 @@ import api from "@/services/api";
 import useUserStore from "@/stores/user";
 import { ILoginResponse } from "../FormLogin";
 import { toast } from "react-toastify";
+import { z } from "zod";
 
-interface IFormRegister {
-	name: string;
-	email: string;
-	password: string;
-	confirmPassword?: string;
-}
+type IFormRegister = z.infer<typeof formRegisterSchema>;
 
 function FormRegister() {
-	const { setUser } = useUserStore();
-	const [isLoading, setIsLoading] = useState(false);
-	const [isEmailRegistered, setIsEmailRegistered] = useState(false);
-	const router = useRouter();
+  const { setUser, signUp } = useUserStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEmailRegistered, setIsEmailRegistered] = useState(false);
+  const router = useRouter();
 
-	const {
-		handleSubmit,
-		register,
-		formState: { errors },
-	} = useForm<IFormRegister>({
-		resolver: zodResolver(formRegisterSchema),
-	});
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<IFormRegister>({
+    resolver: zodResolver(formRegisterSchema),
+  });
 
-	async function handleRegister(dataRegister: IFormRegister) {
-		setIsLoading(true);
+  async function handleRegister(dataRegister: IFormRegister) {
+    setIsLoading(true);
 
-		try {
-			delete dataRegister?.confirmPassword;
-			await api.post("/users", dataRegister);
-			toast.success("Conta criada");
-			handleLogin(dataRegister.email, dataRegister.password);
-		} catch (error) {
-			if (isAxiosError(error)) {
-				const msgErrorForCompare = "Email already registered";
-				const msgAxios = error.response?.data.message;
+    try {
+      await signUp({
+        name: dataRegister.name,
+        email: dataRegister.email,
+        password: dataRegister.password,
+        confirm_password: dataRegister.confirm_password,
+      });
 
-				if (msgAxios == msgErrorForCompare) {
-					setIsEmailRegistered(true);
-				}
-			}
-		} finally {
-			setIsLoading(false);
-		}
-	}
+      toast.success("Conta criada");
+      handleLogin(dataRegister.email, dataRegister.password);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const msgErrorForCompare = "Email already registered";
+        const msgAxios = error.response?.data.message;
 
-	async function handleLogin(email: string, password: string) {
-		setIsLoading(true);
+        if (msgAxios == msgErrorForCompare) {
+          setIsEmailRegistered(true);
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
-		try {
-			const resp = await api.post("/auth/signin", { email, password });
-			const { accessToken, user }: ILoginResponse = resp.data;
-			setCookie(null, "@HomeHub:user_token", accessToken, {
-				maxAge: 86400,
-				path: "/",
-			});
-			setUser(user);
-			router.replace("/");
-		} catch (error) {
-			router.replace("/login");
-		} finally {
-			setIsLoading(false);
-		}
-	}
+  async function handleLogin(email: string, password: string) {
+    setIsLoading(true);
 
-	return (
-		<Form onSubmit={handleSubmit(handleRegister)} className="mt-[2%]">
-			<FormTitle className="mb-8">Cadastro</FormTitle>
+    try {
+      const resp = await api.post("/auth/signin", { email, password });
+      const { accessToken, user }: ILoginResponse = resp.data;
+      setCookie(null, "@HomeHub:user_token", accessToken, {
+        maxAge: 86400,
+        path: "/",
+      });
+      setUser(user);
+      router.replace("/");
+    } catch (error) {
+      router.replace("/login");
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
-			<FormLabel htmlFor="name">Nome</FormLabel>
-			<FormInput type="text" id="name" placeholder="Informe seu nome" register={register("name")} />
-			{errors.name && <FormErrorText className="mt-2">{errors.name.message}</FormErrorText>}
+  return (
+    <Form onSubmit={handleSubmit(handleRegister)} className="mt-[2%]">
+      <FormTitle className="mb-8">Cadastro</FormTitle>
 
-			<FormLabel htmlFor="email">Email</FormLabel>
-			<FormInput type="email" id="email" placeholder="Informe seu email" register={register("email")} />
-			{errors.email && <FormErrorText className="mt-2">{errors.email.message}</FormErrorText>}
-			{isEmailRegistered && <FormErrorText className="mt-2">Email já cadastrado, tente outro</FormErrorText>}
+      <FormLabel htmlFor="name">Nome</FormLabel>
+      <FormInput
+        type="text"
+        id="name"
+        placeholder="Informe seu nome"
+        register={register("name")}
+      />
+      {errors.name && (
+        <FormErrorText className="mt-2">{errors.name.message}</FormErrorText>
+      )}
 
-			<FormLabel htmlFor="password">Senha</FormLabel>
-			<FormInput type="password" id="password" placeholder="Informe sua senha" register={register("password")} />
-			{errors.password && <FormErrorText className="mt-2">{errors.password.message}</FormErrorText>}
+      <FormLabel htmlFor="email">Email</FormLabel>
+      <FormInput
+        type="email"
+        id="email"
+        placeholder="Informe seu email"
+        register={register("email")}
+      />
+      {errors.email && (
+        <FormErrorText className="mt-2">{errors.email.message}</FormErrorText>
+      )}
+      {isEmailRegistered && (
+        <FormErrorText className="mt-2">
+          Email já cadastrado, tente outro
+        </FormErrorText>
+      )}
 
-			<FormLabel htmlFor="confirmPassword">Confirme sua senha</FormLabel>
-			<FormInput
-				type="password"
-				id="confirmPassword"
-				placeholder="Informe novamente sua senha"
-				register={register("confirmPassword")}
-			/>
-			{errors.confirmPassword && <FormErrorText className="mt-2">{errors.confirmPassword.message}</FormErrorText>}
+      <FormLabel htmlFor="password">Senha</FormLabel>
+      <FormInput
+        type="password"
+        id="password"
+        placeholder="Informe sua senha"
+        register={register("password")}
+      />
+      {errors.password && (
+        <FormErrorText className="mt-2">
+          {errors.password.message}
+        </FormErrorText>
+      )}
 
-			<Button type="submit" className="mt-9" disabled={isLoading}>
-				Finalizar Cadastro
-			</Button>
+      <FormLabel htmlFor="confirmPassword">Confirme sua senha</FormLabel>
+      <FormInput
+        type="password"
+        id="confirmPassword"
+        placeholder="Informe novamente sua senha"
+        register={register("confirm_password")}
+      />
+      {errors.confirm_password && (
+        <FormErrorText className="mt-2">
+          {errors.confirm_password.message}
+        </FormErrorText>
+      )}
 
-			<p className="mt-9 text-sm text-center text-gray1 font-medium ">
-				Já possui conta?{" "}
-				<Link href="/login" className="text-brand1">
-					Fazer Login
-				</Link>
-			</p>
-		</Form>
-	);
+      <Button type="submit" className="mt-9" disabled={isLoading}>
+        Finalizar Cadastro
+      </Button>
+
+      <p className="mt-9 text-sm text-center text-gray1 font-medium ">
+        Já possui conta?{" "}
+        <Link href="/login" className="text-brand1">
+          Fazer Login
+        </Link>
+      </p>
+    </Form>
+  );
 }
 
 export default FormRegister;
