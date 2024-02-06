@@ -6,8 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { isAxiosError } from "axios";
 import { toast } from "react-toastify";
-import api from "@/services/api";
-import useUserStore, { IUser } from "@/stores/user";
+import useUserStore from "@/stores/user";
 import Form from "../Form";
 import FormInput from "../Form/FormInput";
 import FormTitle from "../Form/FormTitle";
@@ -17,91 +16,104 @@ import FormLabel from "../Form/FormLabel";
 import formLoginSchema from "@/schemas/formLoginSchema";
 
 interface IFormLogin {
-	email: string;
-	password: string;
-}
-
-export interface ILoginResponse {
-	accessToken: string;
-	user: IUser;
+  email: string;
+  password: string;
 }
 
 function FormLogin() {
-	const { setUser } = useUserStore();
-	const [isLoading, setIsLoading] = useState(false);
-	const [isLoginIncorrect, setIsLoginIncorrect] = useState(false);
-	const router = useRouter();
-	const {
-		handleSubmit,
-		register,
-		formState: { errors },
-	} = useForm<IFormLogin>({
-		resolver: zodResolver(formLoginSchema),
-	});
+  const { signIn } = useUserStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoginIncorrect, setIsLoginIncorrect] = useState(false);
+  const router = useRouter();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<IFormLogin>({
+    resolver: zodResolver(formLoginSchema),
+  });
 
-	async function handleLogin(dataLogin: IFormLogin) {
-		setIsLoading(true);
+  async function handleLogin(data: IFormLogin) {
+    setIsLoading(true);
 
-		try {
-			const resp = await api.post("/auth/signin", dataLogin);
-			const { accessToken, user }: ILoginResponse = resp.data;
-			console.log(accessToken);
-			setCookie(null, "@homeHub:user_token", accessToken, {
-				maxAge: 86400,
-				path: "/",
-			});
-			setUser(user);
-			toast.success("Login efetuado");
-			router.replace("/");
-		} catch (error) {
-			if (isAxiosError(error)) {
-				const msgErrorForCompare = "Email or password invalid";
-				const msgErrorAccountDesable = "User account desabled";
-				const msgAxios = error.response?.data.message;
-				if (msgAxios == msgErrorForCompare) {
-					setIsLoginIncorrect(true);
-				} else if (msgAxios == msgErrorAccountDesable) {
-					const { user } = error.response?.data;
-					setCookie(null, "@homeHub:is_activation_user", "true");
-					router.replace(`/active-account/${user.id}`);
-				}
-			}
-		} finally {
-			setIsLoading(false);
-		}
-	}
+    try {
+      await signIn({
+        email: data.email,
+        password: data.password,
+      });
 
-	return (
-		<Form onSubmit={handleSubmit(handleLogin)} className="mt-[6%]">
-			<FormTitle className="mb-8">Login</FormTitle>
+      toast.success("Login efetuado");
+      router.replace("/");
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const msgErrorForCompare = "Email or password invalid";
+        const msgErrorAccountDesable = "User account desabled";
+        const msgAxios = error.response?.data.message;
+        if (msgAxios == msgErrorForCompare) {
+          setIsLoginIncorrect(true);
+        } else if (msgAxios == msgErrorAccountDesable) {
+          const { user } = error.response?.data;
+          setCookie(null, "@homeHub:is_activation_user", "true");
+          router.replace(`/active-account/${user.id}`);
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
-			<FormLabel htmlFor="email">Email</FormLabel>
-			<FormInput type="email" id="email" placeholder="Informe seu email" register={register("email")} />
-			{errors.email?.message && <FormErrorText className="mt-2">{errors.email.message}</FormErrorText>}
-			<FormLabel htmlFor="password">Senha</FormLabel>
-			<FormInput type="password" id="password" placeholder="Informe sua senha" register={register("password")} />
-			{errors.password?.message && <FormErrorText className="mt-2">{errors.password.message}</FormErrorText>}
+  return (
+    <Form onSubmit={handleSubmit(handleLogin)} className="mt-[6%]">
+      <FormTitle className="mb-8">Login</FormTitle>
 
-			<Link href="/recovery-password" className="block mt-2 text-sm text-right text-gray2">
-				Esqueceu a senha?
-			</Link>
+      <FormLabel htmlFor="email">Email</FormLabel>
+      <FormInput
+        type="email"
+        id="email"
+        placeholder="Informe seu email"
+        register={register("email")}
+      />
+      {errors.email?.message && (
+        <FormErrorText className="mt-2">{errors.email.message}</FormErrorText>
+      )}
+      <FormLabel htmlFor="password">Senha</FormLabel>
+      <FormInput
+        type="password"
+        id="password"
+        placeholder="Informe sua senha"
+        register={register("password")}
+      />
+      {errors.password?.message && (
+        <FormErrorText className="mt-2">
+          {errors.password.message}
+        </FormErrorText>
+      )}
 
-			{isLoginIncorrect && (
-				<FormErrorText className="mt-6 mb-9 text-center">Email ou senha inválidos</FormErrorText>
-			)}
+      <Link
+        href="/recovery-password"
+        className="block mt-2 text-sm text-right text-gray2"
+      >
+        Esqueceu a senha?
+      </Link>
 
-			<Button type="submit" className="mt-9" disabled={isLoading}>
-				Fazer Login
-			</Button>
+      {isLoginIncorrect && (
+        <FormErrorText className="mt-6 mb-9 text-center">
+          Email ou senha inválidos
+        </FormErrorText>
+      )}
 
-			<p className="mt-9 text-sm text-center text-gray1 font-medium ">
-				Ainda não possui conta?{" "}
-				<Link href="/register" className="text-brand1">
-					Fazer Cadastro
-				</Link>
-			</p>
-		</Form>
-	);
+      <Button type="submit" className="mt-9" disabled={isLoading}>
+        Fazer Login
+      </Button>
+
+      <p className="mt-9 text-sm text-center text-gray1 font-medium ">
+        Ainda não possui conta?{" "}
+        <Link href="/register" className="text-brand1">
+          Fazer Cadastro
+        </Link>
+      </p>
+    </Form>
+  );
 }
 
 export default FormLogin;

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Link from "next/link";
-import { setCookie } from "nookies";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,16 +11,14 @@ import FormLabel from "../Form/FormLabel";
 import FormTitle from "../Form/FormTitle";
 import formRegisterSchema from "@/schemas/formRegisterSchema";
 import FormErrorText from "../Form/FormErrorText";
-import api from "@/services/api";
 import useUserStore from "@/stores/user";
-import { ILoginResponse } from "../FormLogin";
 import { toast } from "react-toastify";
 import { z } from "zod";
 
 type IFormRegister = z.infer<typeof formRegisterSchema>;
 
 function FormRegister() {
-  const { setUser, signUp } = useUserStore();
+  const { signUp, signIn } = useUserStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailRegistered, setIsEmailRegistered] = useState(false);
   const router = useRouter();
@@ -34,20 +31,27 @@ function FormRegister() {
     resolver: zodResolver(formRegisterSchema),
   });
 
-  async function handleRegister(dataRegister: IFormRegister) {
+  async function handleRegister(data: IFormRegister) {
     setIsLoading(true);
 
     try {
       await signUp({
-        name: dataRegister.name,
-        email: dataRegister.email,
-        password: dataRegister.password,
-        confirm_password: dataRegister.confirm_password,
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        confirm_password: data.confirm_password,
       });
 
       toast.success("Conta criada");
-      handleLogin(dataRegister.email, dataRegister.password);
+
+      await signIn({
+        email: data.email,
+        password: data.password,
+      });
+
+      await router.replace("/");
     } catch (error) {
+      console.log(error);
       if (isAxiosError(error)) {
         const msgErrorForCompare = "Email already registered";
         const msgAxios = error.response?.data.message;
@@ -56,25 +60,6 @@ function FormRegister() {
           setIsEmailRegistered(true);
         }
       }
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function handleLogin(email: string, password: string) {
-    setIsLoading(true);
-
-    try {
-      const resp = await api.post("/auth/signin", { email, password });
-      const { accessToken, user }: ILoginResponse = resp.data;
-      setCookie(null, "@HomeHub:user_token", accessToken, {
-        maxAge: 86400,
-        path: "/",
-      });
-      setUser(user);
-      router.replace("/");
-    } catch (error) {
-      router.replace("/login");
     } finally {
       setIsLoading(false);
     }
