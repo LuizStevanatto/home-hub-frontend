@@ -19,10 +19,12 @@ export interface IProperty {
 
 interface IUsePropertyStore {
   createProperty: (property: IProperty) => void
-  getProperty: (id: string) => void
+  getProperty: (id: string) => Promise<IProperty>
+  getProperties: () => Promise<IProperty[]>
   updateProperty: (property: IProperty) => void
   deleteProperty: (id: string) => void
 }
+
 
 export const usePropertyStore = create<IUsePropertyStore>(() => ({
 
@@ -32,6 +34,12 @@ export const usePropertyStore = create<IUsePropertyStore>(() => ({
 
   async getProperty(id: string) {
     const response = await api.get(`property/${id}`)
+
+    return response.data
+  },
+
+  async getProperties() {
+    const response = await api.get('/property')
 
     return response.data
   },

@@ -1,14 +1,18 @@
 import { toast } from "react-toastify";
-import { ReactNode, createContext, useEffect, useState } from "react";
-import { IProperty } from "@/pages";
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { IDataPropertyRequest } from "@/pages/properties";
 import api from "@/services/api";
+import { IProperty, usePropertyStore } from "@/stores/property";
 
 interface IMyAdsListPropertiesContext {
   properties: IProperty[] | [];
   handleDeleteProperty: (propertyId: string) => Promise<void>;
-  handleDisableProperty: (propertyId: string) => Promise<void>;
-  handleEnableProperty: (propertyId: string) => Promise<void>;
 }
 
 interface IMyAdsListPropertiesProvider {
@@ -22,11 +26,12 @@ export const MyAdsListPropertiesContext = createContext(
 function MyAdsListPropertiesProvider({
   children,
 }: IMyAdsListPropertiesProvider) {
+  const { getProperties, deleteProperty } = usePropertyStore();
   const [properties, setProperties] = useState<[] | IProperty[]>([]);
 
   async function handleDeleteProperty(propertyId: string) {
     try {
-      await api.delete(`/properties/${propertyId}`);
+      await deleteProperty(propertyId);
       const propertiesWithoutDeleted = properties.filter(
         ({ id }) => id != propertyId
       );
@@ -38,68 +43,25 @@ function MyAdsListPropertiesProvider({
     }
   }
 
-  async function handleDisableProperty(propertyId: string) {
+  const handleGetPropertiesUser = useCallback(async () => {
     try {
-      await api.patch(`/properties/deactivate/${propertyId}`);
-      const propertiesWithUpdated = properties.map((property) => {
-        if (property.id == propertyId) {
-          return {
-            ...property,
-            isActive: false,
-          };
-        }
+      const properties: IProperty[] = await getProperties();
 
-        return property;
-      });
-
-      setProperties(propertiesWithUpdated);
-      toast.success("Anúncio desativado");
+      setProperties(properties);
     } catch (error) {
-    } finally {
-      return;
+      console.log(error);
     }
-  }
-
-  async function handleEnableProperty(propertyId: string) {
-    try {
-      await api.patch(`/properties/activate/${propertyId}`);
-      const propertiesWithUpdated = properties.map((property) => {
-        if (property.id == propertyId) {
-          return {
-            ...property,
-            isActive: true,
-          };
-        }
-        return property;
-      });
-
-      setProperties(propertiesWithUpdated);
-      toast.success("Anúncio ativado");
-    } catch (error) {
-    } finally {
-      return;
-    }
-  }
+  }, [getProperties]);
 
   useEffect(() => {
-    async function handleGetPropertiesUser() {
-      try {
-        const resp = await api.get("/properties/user");
-        const dataRequest: IDataPropertyRequest = resp.data;
-        setProperties(dataRequest.content);
-      } catch (error) {}
-    }
-
     handleGetPropertiesUser();
-  }, []);
+  }, [handleGetPropertiesUser]);
 
   return (
     <MyAdsListPropertiesContext.Provider
       value={{
         properties,
         handleDeleteProperty,
-        handleDisableProperty,
-        handleEnableProperty,
       }}
     >
       {children}
