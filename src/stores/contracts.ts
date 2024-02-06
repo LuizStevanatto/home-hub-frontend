@@ -1,7 +1,7 @@
 import api from "@/services/api";
 import { create } from "zustand";
 
-export interface IContracts {
+export interface IContract {
   id: string;
 	propertyId: string;
 	tentantId: string;
@@ -15,19 +15,19 @@ export interface IContracts {
 }
 
 interface IUseContractsStore {
-  contract: IContracts | null
-  getContract: (id: string) => void
-  getContracts: () => void
-  getActiveContracts: () => void;
-  getContractOwner: (id: string) => void
-  getPropertyContracts: (id: string) => void
-  getTenantContracts: (id: string) => void
-  createContract: (contract: IContracts) => void
-  updateContract: (contract: IContracts) => void
+  contract: IContract | null
+  getContract: (id: string) => Promise<IContract>
+  getContracts: () => Promise<IContract[]>
+  getActiveContracts: () => Promise<IContract[]>;
+  getContractOwner: (id: string) => Promise<IContract>
+  getPropertyContracts: (id: string) => Promise<IContract[]>
+  getTenantContracts: (id: string) => Promise<IContract[]>
+  createContract: (contract: IContract) => void
+  updateContract: (contract: IContract) => void
   deleteContract: (id: string) => void
 }
 
-export const useContractsStore = create<IUseContractsStore>((set) => ({
+export const useContractsStore = create<IUseContractsStore>(() => ({
   contract: null,
 
   async getContract(id: string) {
@@ -45,7 +45,7 @@ export const useContractsStore = create<IUseContractsStore>((set) => ({
   async getActiveContracts() {
     const response = await api.get('/contracts')
 
-    return response.data.filter((contract: IContracts) => contract.isActive === true)
+    return response.data.filter((contract: IContract) => contract.isActive === true)
   },
 
   async getContractOwner(id: string) {
@@ -66,11 +66,11 @@ export const useContractsStore = create<IUseContractsStore>((set) => ({
     return response.data
   },
 
-  async createContract(data: IContracts) {
+  async createContract(data: IContract) {
     await api.post('/contracts', data)
   },
 
-  async updateContract(data: IContracts) {
+  async updateContract(data: IContract) {
     await api.put(`/contracts/${data.id}`, data)
   },
 
