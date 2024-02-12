@@ -34,9 +34,17 @@ interface UpdateUserProps {
   email: string
 }
 
+interface GetUserProps {
+  id: string
+  email: string;
+	name: string;
+	isAdmin: boolean;
+	isActive: boolean;
+}
+
 interface IUseUserStore {
   user: IUser | null;
-  setUser: (user: IUser | null) => void;
+  getUser: (id: string) => Promise<GetUserProps>
   signUp: (newUser: SignUpProps) => void
   signIn: (data: SignInProps) => void
   updateUser: (data: UpdateUserProps) => void;
@@ -46,7 +54,14 @@ interface IUseUserStore {
 
 const useUserStore = create<IUseUserStore>((set, get) => ({
   user: null,
-  setUser: (user: IUser | null) => set({ user }),
+
+  async getUser(id: string) {
+    const response = await api.get(`/users/${id}`)
+
+
+    set({ user: response.data })
+    return response.data
+  },  
 
   async signUp(data: SignUpProps) {
     await api.post('/users/signup', {
@@ -57,20 +72,22 @@ const useUserStore = create<IUseUserStore>((set, get) => ({
   },
 
   async signIn(data: SignInProps) {
+    const { getUser } = get()
+
     const response = await api.post('/auth/signin', {
       email: data.email,
       password: data.password
     })
 
-    console.log('response', response)
 
-    const { accessToken, user }: ILoginResponse = response.data;
+    const { accessToken }: ILoginResponse = response.data;
 
     setCookie(null, "@homeHub:user_token", accessToken, {
       maxAge: 86400,
       path: "/",
     });
-    set({ user: user })
+
+    getUser(response.data.id)
   },
 
   async signOut() {
@@ -82,7 +99,7 @@ const useUserStore = create<IUseUserStore>((set, get) => ({
     const { user } = get()
 
     const response = await api.patch(`users/${user?.id}`, data)
-    set({ setUser: response.data })
+    set({ user: response.data })
   },
 
   async deleteUser(id: string) {
