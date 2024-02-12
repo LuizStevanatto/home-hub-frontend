@@ -4,14 +4,13 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Switch,
   useDisclosure,
 } from "@chakra-ui/react";
-import { IProperty } from "@/pages";
 import useMyAdsListProperties from "@/contexts/MyAdsListPropertiesContext/hook";
+import { IProperty } from "@/stores/property";
 
 interface IModalDisableProperty {
   property: IProperty;
@@ -19,23 +18,21 @@ interface IModalDisableProperty {
 
 function ModalDisableProperty({ property }: IModalDisableProperty) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { handleDisableProperty, handleEnableProperty } =
-    useMyAdsListProperties();
 
-  const { id, isActive } = property;
+  const { id, isAvailable } = property;
 
   return (
     <>
       <div onClick={onOpen} className="flex items-center gap-1">
-        <Switch isChecked={isActive} />
-        <span>{isActive ? "Ativado" : "Desativado"}</span>
+        <Switch isChecked={isAvailable} />
+        <span>{isAvailable ? "Ativado" : "Desativado"}</span>
       </div>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <h2>{isActive ? "Desativar" : "Ativar"} anúncio</h2>
+            <h2>{!isAvailable ? "Desativar" : "Ativar"} anúncio</h2>
             <ModalCloseButton />
           </ModalHeader>
           <ModalBody>
@@ -43,29 +40,11 @@ function ModalDisableProperty({ property }: IModalDisableProperty) {
               Tem certa que deseja desativar seu anúncio?
             </p>
             <p className="mt-3 text-gray2 font-normal leading-normal">
-              {isActive
+              {!isAvailable
                 ? "Seu anúncio não será mais exibido nas pesquisas até que você ative ele novamente."
                 : "Seu anúncio irá voltar a ser exibido nas buscas novamente."}
             </p>
           </ModalBody>
-          <ModalFooter>
-            <Button type="button" onClick={onClose} mr={6}>
-              Cancelar
-            </Button>
-            <Button
-              type="button"
-              onClick={async () => {
-                if (isActive) {
-                  await handleDisableProperty(id);
-                } else {
-                  await handleEnableProperty(id);
-                }
-                onClose();
-              }}
-            >
-              Sim, {isActive ? "Desativar" : "Ativar"}
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
