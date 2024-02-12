@@ -1,8 +1,6 @@
-import Header from "@/components/Header";
 import Banner from "@/components/Banner";
 import ListProperties from "@/components/ListProperties";
 import Container from "@/components/Conateiner";
-import Footer from "@/components/Footer";
 import Link from "next/link";
 import Head from "next/head";
 
@@ -12,7 +10,6 @@ export default function Home() {
       <Head>
         <title>Alguns imóveis</title>
       </Head>
-      <Header />
       <Banner>
         {" "}
         <h2 className="text-3xl text-center text-white font-bold mx-4 leading-normal">
@@ -37,7 +34,6 @@ export default function Home() {
           </section>
         </Container>
       </main>
-      <Footer />
     </>
   );
 }

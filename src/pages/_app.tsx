@@ -8,6 +8,7 @@ import api from "@/services/api";
 import useUserStore, { IUser } from "@/stores/user";
 import "@/styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
+import { LayoutRoot } from "@/layout/root";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -15,7 +16,7 @@ const poppins = Poppins({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { setUser } = useUserStore();
+  const { signIn } = useUserStore();
 
   const token = parseCookies()["@webcasas:user_token"];
   if (token) {
@@ -27,7 +28,10 @@ export default function App({ Component, pageProps }: AppProps) {
       try {
         const resp = await api.get("/sessions");
         const user: IUser = resp.data;
-        setUser(user);
+        await signIn({
+          email: user.email,
+          password: user.password,
+        });
       } catch (error) {}
     }
 
@@ -46,7 +50,9 @@ export default function App({ Component, pageProps }: AppProps) {
         `}
       </style> */}
       <ChakraProvider>
-        <Component {...pageProps} />
+        <LayoutRoot>
+          <Component {...pageProps} />
+        </LayoutRoot>
       </ChakraProvider>
       <ToastContainer autoClose={1500} />
     </>

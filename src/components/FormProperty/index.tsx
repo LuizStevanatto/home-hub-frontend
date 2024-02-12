@@ -12,6 +12,7 @@ import FormTextarea from "../Form/FormTextarea";
 import apiIbge from "@/services/apiIbge";
 import { useRouter } from "next/router";
 import { IProperty, usePropertyStore } from "@/stores/property";
+import useUserStore from "@/stores/user";
 
 interface IState {
   id: number;
@@ -25,6 +26,7 @@ interface ICity {
 }
 
 function FormAddProperty() {
+  const { user } = useUserStore();
   const { createProperty } = usePropertyStore();
   const [states, setStates] = useState([] as IState[]);
   const [cities, setCities] = useState([] as ICity[]);
@@ -72,9 +74,12 @@ function FormAddProperty() {
     setIsLoading(true);
 
     try {
-      await createProperty(data);
+      await createProperty({
+        ...data,
+        id: String(user?.id),
+      });
 
-      await router.push(`property/${data.id}`);
+      await router.push(`property/${String(user?.id)}`);
     } catch (error) {}
 
     setIsLoading(false);

@@ -26,31 +26,31 @@ function CardProperty({ property }: ICardPropertyProps) {
 
   return (
     <li className=" flex-shrink-0 h-[28.875rem]  border border-gray5 rounded-lg relative">
-      <Link target="_blank" href={`/property/${id}`} className="p-5 block">
+      <Link href={`/property/${id}`} className="p-5 block">
         <strong className="h-24 text-xl leading-normal text-gray0 font-semibold line-clamp-3">
           {name}
         </strong>
 
-        <div className="flex flex-col gap-4">
-          <span className="text-base">
+        <div className="flex flex-col gap-4 text-base">
+          <span>
             <strong>Descrição</strong>: {description}
           </span>
-          <span className="text-base">
+          <span>
             <strong>Valor</strong>: {priceFormatted}
           </span>
-          <span className="text-base">
+          <span>
             <strong>País</strong>: {country}
           </span>
-          <span className="text-base">
+          <span>
             <strong>CEP:</strong> {zipCode}
           </span>
-          <span className="text-base">
+          <span>
             <strong>Estado</strong>: {state}
           </span>
-          <span className="text-base">
+          <span>
             <strong>Cidade</strong>: {city}
           </span>
-          <span className="text-base">
+          <span>
             <strong>Endereço</strong>: {address}
           </span>
         </div>

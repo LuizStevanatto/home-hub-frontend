@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import BannerProperties from "@/components/BannerProperties";
 import FilterProperties from "@/components/FilterProperties";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import api from "@/services/api";
 import ListProperties from "@/components/ListProperties";
 import Container from "@/components/Conateiner";
 import FilterProvider from "@/contexts/FIlterContext";
@@ -43,7 +40,6 @@ function Properties({ serverSidePropsQuery }: IProperties) {
       <Head>
         <title>Encontre seu imóvel</title>
       </Head>
-      <Header />
       <FilterProvider>
         <BannerProperties
           setProperties={setProperties}
@@ -55,7 +51,6 @@ function Properties({ serverSidePropsQuery }: IProperties) {
           <ListProperties />
         </Container>
       </FilterProvider>
-      <Footer />
     </>
   );
 }
