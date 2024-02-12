@@ -11,12 +11,12 @@ import {
 } from "@chakra-ui/react";
 import Button from "../Button";
 import { Dispatch, SetStateAction } from "react";
-import { IProperty } from "@/pages";
 import PropertyType from "./PropertyType";
 import IsSale from "./IsSale";
 import IsInCondo from "./IsInCondo";
 import PropertyDetails from "./PropertyDetails";
 import useFilterProperties from "@/contexts/FIlterContext/hook";
+import { IProperty } from "@/stores/property";
 
 interface IFilterProperties {
   setProperties: Dispatch<SetStateAction<[] | IProperty[]>>;
