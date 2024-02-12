@@ -6,8 +6,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { IDataPropertyRequest } from "@/pages/properties";
-import api from "@/services/api";
 import { IProperty, usePropertyStore } from "@/stores/property";
 
 interface IMyAdsListPropertiesContext {

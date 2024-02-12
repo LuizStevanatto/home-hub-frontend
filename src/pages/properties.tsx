@@ -5,11 +5,11 @@ import BannerProperties from "@/components/BannerProperties";
 import FilterProperties from "@/components/FilterProperties";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { IProperty } from ".";
 import api from "@/services/api";
 import ListProperties from "@/components/ListProperties";
 import Container from "@/components/Conateiner";
 import FilterProvider from "@/contexts/FIlterContext";
+import { IProperty } from "@/stores/property";
 
 export interface IDataPropertyRequest {
   prevPage: string | null;
@@ -36,34 +36,7 @@ interface IProperties {
 }
 
 function Properties({ serverSidePropsQuery }: IProperties) {
-  const [properties, setProperties] = useState<[] | IProperty[]>([]);
-
-  async function handleGetProperties() {
-    const {
-      state,
-      city,
-      propertyType_0,
-      propertyType_1,
-      isSale,
-      isInCondo,
-      hasPoolProperty,
-      hasFurnitureProperty,
-      hasGrillProperty,
-      hasAirConditioningProperty,
-    } = serverSidePropsQuery;
-
-    try {
-      const resp = await api.get(
-        `/properties/filter?state=${state}&city=${city}&propertyType=${propertyType_0},${propertyType_1}&isSale=${isSale}&isInCondo=${isInCondo}&hasPoolProperty=${hasPoolProperty}&hasFurnitureProperty=${hasFurnitureProperty}&hasGrillProperty=${hasGrillProperty}&hasAirConditioningProperty=${hasAirConditioningProperty}`
-      );
-
-      const dataRequest: IDataPropertyRequest = resp.data;
-      setProperties(dataRequest.content);
-    } catch (error) {}
-  }
-  useEffect(() => {
-    handleGetProperties();
-  }, []);
+  const [, setProperties] = useState<[] | IProperty[]>([]);
 
   return (
     <>
@@ -79,7 +52,7 @@ function Properties({ serverSidePropsQuery }: IProperties) {
         />
         <FilterProperties setProperties={setProperties} />
         <Container>
-          <ListProperties properties={properties} />
+          <ListProperties />
         </Container>
       </FilterProvider>
       <Footer />

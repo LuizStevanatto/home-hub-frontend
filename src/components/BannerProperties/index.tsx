@@ -11,10 +11,10 @@ import Banner from "@/components/Banner";
 import Form from "@/components/Form";
 import FormSelect from "@/components/Form/FormSelect";
 import FormTitle from "@/components/Form/FormTitle";
-import { IProperty } from "@/pages";
 import apiIbge from "@/services/apiIbge";
 import Button from "../Button";
 import useFilterProperties from "@/contexts/FIlterContext/hook";
+import { IProperty } from "@/stores/property";
 
 interface IBannerProperties {
   stateQuery: string | undefined;

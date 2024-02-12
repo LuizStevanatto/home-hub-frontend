@@ -40,6 +40,7 @@ interface IUseUserStore {
   signUp: (newUser: SignUpProps) => void
   signIn: (data: SignInProps) => void
   updateUser: (data: UpdateUserProps) => void;
+  signOut(): void;
   deleteUser: (id: string) => void;
 }
 
@@ -61,13 +62,20 @@ const useUserStore = create<IUseUserStore>((set, get) => ({
       password: data.password
     })
 
+    console.log('response', response)
+
     const { accessToken, user }: ILoginResponse = response.data;
 
     setCookie(null, "@homeHub:user_token", accessToken, {
       maxAge: 86400,
       path: "/",
     });
-    set({ user })
+    set({ user: user })
+  },
+
+  async signOut() {
+    destroyCookie(null, "@homeHub:user_token");
+    set({ user: null })
   },
 
   async updateUser(data: UpdateUserProps) {

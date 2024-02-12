@@ -25,7 +25,6 @@ interface IUsePropertyStore {
   deleteProperty: (id: string) => void
 }
 
-
 export const usePropertyStore = create<IUsePropertyStore>(() => ({
 
   async createProperty(data: IProperty) {
@@ -33,7 +32,7 @@ export const usePropertyStore = create<IUsePropertyStore>(() => ({
   },
 
   async getProperty(id: string) {
-    const response = await api.get(`property/${id}`)
+    const response = await api.get(`/property/${id}`)
 
     return response.data
   },
