@@ -35,14 +35,6 @@ export default function Home() {
 
             <ListProperties />
           </section>
-
-          <section className="mt-[3.125rem]">
-            <h2 className="mb-[1.875rem] text-xl text-gray1 font-semibold">
-              Anúncios em alta
-            </h2>
-
-            <ListProperties />
-          </section>
         </Container>
       </main>
       <Footer />
