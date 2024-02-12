@@ -3,8 +3,11 @@ import ListProperties from "@/components/ListProperties";
 import Container from "@/components/Conateiner";
 import Link from "next/link";
 import Head from "next/head";
+import useUserStore from "@/stores/user";
 
 export default function Home() {
+  const { user } = useUserStore();
+
   return (
     <>
       <Head>
@@ -23,17 +26,19 @@ export default function Home() {
           Ver mais imóveis
         </Link>
       </Banner>
-      <main>
-        <Container>
-          <section className="mt-[3.125rem]">
-            <h2 className="mb-[1.875rem] text-xl text-gray1 font-semibold">
-              Anúncios recentes
-            </h2>
+      {user && (
+        <main>
+          <Container>
+            <section className="mt-[3.125rem]">
+              <h2 className="mb-[1.875rem] text-xl text-gray1 font-semibold">
+                Anúncios recentes
+              </h2>
 
-            <ListProperties />
-          </section>
-        </Container>
-      </main>
+              <ListProperties />
+            </section>
+          </Container>
+        </main>
+      )}
     </>
   );
 }

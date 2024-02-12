@@ -8,10 +8,10 @@ export function LayoutRoot(props: LayoutRootProps) {
   const { children } = props;
 
   return (
-    <main className="max-w-screen">
+    <>
       <Header />
-      <div className="h-[calc(100vh-197px)]">{children}</div>
+      <div className="h-[calc(100vh-68px)] overflow-y-auto">{children}</div>
       <Footer />
-    </main>
+    </>
   );
 }

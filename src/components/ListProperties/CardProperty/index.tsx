@@ -1,11 +1,17 @@
 import { IProperty } from "@/stores/property";
-import Link from "next/link";
+import useUserStore from "@/stores/user";
+import { useRouter } from "next/router";
+import React from "react";
+import { toast } from "react-toastify";
 
 interface ICardPropertyProps {
   property: IProperty;
 }
 
 function CardProperty({ property }: ICardPropertyProps) {
+  const { user } = useUserStore();
+  const router = useRouter();
+
   const {
     id,
     address,
@@ -16,6 +22,7 @@ function CardProperty({ property }: ICardPropertyProps) {
     city,
     zipCode,
     name,
+    isAvailable,
   } = property;
 
   const priceFormatted = price.toLocaleString("pt-BR", {
@@ -24,14 +31,33 @@ function CardProperty({ property }: ICardPropertyProps) {
     maximumFractionDigits: 0,
   });
 
+  const handleNavigateToRoute = () => {
+    let route = `/property/${id}`;
+
+    if (user && user.isAdmin) {
+      route = route;
+      router.push(route);
+    } else {
+      toast("Você não é um usuário administrador!", {
+        position: "top-center",
+        autoClose: 5000,
+        type: "error",
+      });
+
+      route = "/";
+    }
+
+    router.push(route);
+  };
+
   return (
-    <li className=" flex-shrink-0 h-[28.875rem]  border border-gray5 rounded-lg relative">
-      <Link href={`/property/${id}`} className="p-5 block">
+    <li className=" flex-shrink-0 h-[32rem]  border border-gray5 rounded-lg relative">
+      <div className="p-5 bg-transparent flex flex-col justify-center ">
         <strong className="h-24 text-xl leading-normal text-gray0 font-semibold line-clamp-3">
           {name}
         </strong>
 
-        <div className="flex flex-col gap-4 text-base">
+        <div className="flex flex-col gap-4 text-base text-left">
           <span>
             <strong>Descrição</strong>: {description}
           </span>
@@ -53,8 +79,19 @@ function CardProperty({ property }: ICardPropertyProps) {
           <span>
             <strong>Endereço</strong>: {address}
           </span>
+
+          <span>
+            <strong>Situação:</strong> {isAvailable ? "Á venda" : "Vendida"}
+          </span>
         </div>
-      </Link>
+
+        <button
+          className="mt-5 bg-brand1 p-2 rounded-lg text-white font-semibold hover:bg-brand2"
+          onClick={handleNavigateToRoute}
+        >
+          Visualizar
+        </button>
+      </div>
     </li>
   );
 }

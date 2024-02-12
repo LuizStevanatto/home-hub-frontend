@@ -16,7 +16,7 @@ import { z } from "zod";
 type IFormEditAccountUser = z.infer<typeof formEditAccountUserSchema>;
 
 function FormEditAccountUser() {
-  const { user, setUser, updateUser } = useUserStore();
+  const { user, updateUser } = useUserStore();
   const [isLoading, setIsLoading] = useState(false);
   const {
     handleSubmit,

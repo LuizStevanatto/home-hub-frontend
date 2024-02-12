@@ -8,7 +8,7 @@ function Header() {
   const { user } = useUserStore();
 
   return (
-    <header className="px-4 flex items-center justify-between sticky top-0 left-0 right-0 z-20 bg-white border-b border-gray5 text-gray2 font-medium lg:px-9">
+    <header className="px-4 h-[69px] flex items-center justify-between sticky top-0 left-0 right-0 z-20 bg-white border-b border-gray5 text-gray2 font-medium lg:px-9">
       <Logo />
 
       {!user?.id && (

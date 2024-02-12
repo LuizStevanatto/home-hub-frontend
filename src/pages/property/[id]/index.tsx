@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import { IoLocationOutline } from "react-icons/io5";
 
 import Container from "@/components/Conateiner";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import { IProperty, usePropertyStore } from "@/stores/property";
 
 function Property() {
@@ -40,8 +38,6 @@ function Property() {
       <Head>
         <title>Propriedade</title>
       </Head>
-
-      <Header />
 
       <Container>
         <main className="sm:flex sm:flex-row-reverse sm:justify-between sm:gap-9">
@@ -82,8 +78,6 @@ function Property() {
           </div>
         </main>
       </Container>
-
-      <Footer />
     </>
   );
 }

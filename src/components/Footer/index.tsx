@@ -13,7 +13,7 @@ function Footer() {
   }
 
   return (
-    <footer className="mt-32 h-32 bg-gray0">
+    <footer className="mt-32 h-[128px] bg-gray0">
       <Container className="h-full flex items-center justify-between">
         <Link href="/">
           <Image
