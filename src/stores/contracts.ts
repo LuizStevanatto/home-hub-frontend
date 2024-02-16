@@ -2,16 +2,16 @@ import api from "@/services/api";
 import { create } from "zustand";
 
 export interface IContract {
-  id: string;
+  id?: string;
 	propertyId: string;
 	tentantId: string;
-	ownerId: string;
+	ownerId?: string;
 	startDate: string;
 	endDate: string;
 	isActive: boolean;
-	price: number;
-	createdAt: Date;
-	updatedAt: Date;
+	price: string;
+	createdAt?: Date;
+	updatedAt?: Date;
 }
 
 interface IUseContractsStore {

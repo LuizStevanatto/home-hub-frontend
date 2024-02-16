@@ -77,6 +77,14 @@ function Property() {
             </section>
           </div>
         </main>
+        <button
+          className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
+          onClick={() => {
+            router.push(`/property/${propertyId}/new-contract`);
+          }}
+        >
+          Solicitar Contrato
+        </button>
       </Container>
     </>
   );

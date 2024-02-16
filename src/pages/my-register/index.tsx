@@ -3,7 +3,7 @@ import FormEditAccountUser from "@/components/FormEditAccountUser";
 import FormUpdatePasswordUser from "@/components/FormUpdatePasswordUser";
 import ManagementAccountUser from "@/components/ManagementAccountUser";
 
-function myRegister() {
+function MyRegister() {
   return (
     <>
       <Head>
@@ -21,4 +21,4 @@ function myRegister() {
   );
 }
 
-export default myRegister;
+export default MyRegister;

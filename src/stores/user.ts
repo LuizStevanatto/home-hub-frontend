@@ -11,7 +11,6 @@ export interface IUser {
   id: string;
 	email: string;
 	name: string;
-	password: string;
 	isAdmin: boolean;
 	isActive: boolean;
 }
@@ -34,17 +33,9 @@ interface UpdateUserProps {
   email: string
 }
 
-interface GetUserProps {
-  id: string
-  email: string;
-	name: string;
-	isAdmin: boolean;
-	isActive: boolean;
-}
-
 interface IUseUserStore {
   user: IUser | null;
-  getUser: (id: string) => Promise<GetUserProps>
+  getUser: (id: string) => Promise<IUser>
   signUp: (newUser: SignUpProps) => void
   signIn: (data: SignInProps) => void
   updateUser: (data: UpdateUserProps) => void;
@@ -57,7 +48,6 @@ const useUserStore = create<IUseUserStore>((set, get) => ({
 
   async getUser(id: string) {
     const response = await api.get(`/users/${id}`)
-
 
     set({ user: response.data })
     return response.data
@@ -79,11 +69,10 @@ const useUserStore = create<IUseUserStore>((set, get) => ({
       password: data.password
     })
 
-
     const { accessToken }: ILoginResponse = response.data;
 
     setCookie(null, "@homeHub:user_token", accessToken, {
-      maxAge: 86400,
+      maxAge: 60 * 60 * 24, // 1 day
       path: "/",
     });
 

@@ -4,6 +4,7 @@ import {
   HiOutlineSquares2X2,
 } from "react-icons/hi2";
 import { RxExit } from "react-icons/rx";
+import { FaFileContract } from "react-icons/fa";
 import { BsHouseAdd } from "react-icons/bs";
 
 interface IUserMenuDesktop {
@@ -43,6 +44,14 @@ function UserMenuDesktop({
         >
           <BsHouseAdd size={18} />
           Anunciar
+        </Link>
+
+        <Link
+          href="/contracts"
+          className="py-3 px-4 hover:bg-gray7 flex items-center gap-3"
+        >
+          <FaFileContract size={18} />
+          Contratos
         </Link>
 
         <button
