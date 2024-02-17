@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useUserStore from "@/stores/user";
 import Form from "../Form";
 import FormTitle from "../Form/FormTitle";
-import FormInfoText from "../Form/FormInfoText";
 import FormLabel from "../Form/FormLabel";
 import FormInput from "../Form/FormInput";
 import Button from "../Button";
@@ -30,7 +29,13 @@ function FormEditAccountUser() {
     setIsLoading(true);
 
     try {
-      await updateUser(dataUpdate);
+      await updateUser({
+        ...dataUpdate,
+        id: String(user?.id),
+        isActive: Boolean(user?.isActive),
+        isAdmin: Boolean(user?.isAdmin),
+      });
+
       toast.success("Alterações feitas");
     } catch (error) {
     } finally {
@@ -41,24 +46,20 @@ function FormEditAccountUser() {
   return (
     <Form
       onSubmit={handleSubmit(handleUpdateUser)}
-      className="border border-gray5"
+      className="border border-gray5 min-w-[512px]"
       encType="multipart/form-data"
     >
       <FormTitle>Dados da sua conta</FormTitle>
-      <FormInfoText>
-        Aqui você pode adicionar foto de peril e alterar algumas informações
-      </FormInfoText>
-
+      Aqui você pode alterar informações do seu perfil
       <FormLabel htmlFor="firstName">Nome</FormLabel>
       <FormInput
         id="firstName"
         defaultValue={user?.name}
-        register={register("firstName")}
+        register={register("name")}
       />
-      {errors.firstName?.message && (
-        <FormErrorText>{errors.firstName.message}</FormErrorText>
+      {errors.name?.message && (
+        <FormErrorText>{errors.name.message}</FormErrorText>
       )}
-
       <FormLabel htmlFor="email">Email</FormLabel>
       <FormInput
         id="email"
@@ -68,7 +69,15 @@ function FormEditAccountUser() {
       {errors.email?.message && (
         <FormErrorText>{errors.email.message}</FormErrorText>
       )}
-
+      <FormLabel htmlFor="password">Confirme sua senha</FormLabel>
+      <FormInput
+        type="password"
+        id="password"
+        register={register("password")}
+      />
+      {errors.password?.message && (
+        <FormErrorText>{errors.password.message}</FormErrorText>
+      )}
       <Button type="submit" disabled={isLoading} className="mt-8">
         Salvar alterações
       </Button>

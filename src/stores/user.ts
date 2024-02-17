@@ -12,6 +12,7 @@ export interface IUser {
 	email: string;
 	name: string;
 	isAdmin: boolean;
+  password?: string;
 	isActive: boolean;
 }
 
@@ -27,18 +28,13 @@ interface SignInProps {
   password: string
 }
 
-interface UpdateUserProps {
-  firstName: string
-  lastName: string
-  email: string
-}
 
 interface IUseUserStore {
   user: IUser | null;
   getUser: (id: string) => Promise<IUser>
   signUp: (newUser: SignUpProps) => void
   signIn: (data: SignInProps) => void
-  updateUser: (data: UpdateUserProps) => void;
+  updateUser: (data: IUser) => void;
   signOut(): void;
   deleteUser: (id: string) => void;
 }
@@ -84,10 +80,15 @@ const useUserStore = create<IUseUserStore>((set, get) => ({
     set({ user: null })
   },
 
-  async updateUser(data: UpdateUserProps) {
-    const { user } = get()
+  async updateUser(data: IUser) {
+    const response = await api.put(`users/${data.id}`, {
+      email: data.email,
+      name: data.name,
+      isActive: data.isActive,
+      isAdmin: data.isAdmin,
+      password: data.password,
+    })
 
-    const response = await api.patch(`users/${user?.id}`, data)
     set({ user: response.data })
   },
 

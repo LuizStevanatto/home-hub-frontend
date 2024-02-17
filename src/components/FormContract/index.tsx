@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import Button from "../Button";
 import FormErrorText from "../Form/FormErrorText";
 
-type FormRegisterProps = z.infer<typeof formNewContract>;
+export type FormRegisterProps = z.infer<typeof formNewContract>;
 
 function FormRegisterNewContract() {
   const router = useRouter();
@@ -40,7 +40,7 @@ function FormRegisterNewContract() {
         endDate: data.endDate,
         propertyId: String(propertyId),
         isActive: data.isActive,
-        price: data.price,
+        price: Number(data.price),
         tentantId: String(user?.id),
       });
     } catch (error) {
@@ -71,11 +71,17 @@ function FormRegisterNewContract() {
       <FormInput id="price" register={register("price")} />
       {errors.price && <FormErrorText>{errors.price.message}</FormErrorText>}
 
-      <FormLabel htmlFor="isActive">Ativo?</FormLabel>
-      <Checkbox {...register("isActive")} onChange={handleCheckRadio} />
-      {errors.isActive && (
-        <FormErrorText>{errors.isActive.message}</FormErrorText>
-      )}
+      <div className="flex items-center">
+        <FormLabel htmlFor="isActive">Ativo?</FormLabel>
+        <Checkbox
+          {...register("isActive")}
+          onChange={handleCheckRadio}
+          className="-mt-[0.45rem]"
+        />
+        {errors.isActive && (
+          <FormErrorText>{errors.isActive.message}</FormErrorText>
+        )}
+      </div>
 
       <Button type="submit">Enviar</Button>
     </Form>

@@ -3,13 +3,13 @@ import { create } from "zustand";
 
 export interface IContract {
   id?: string;
-	propertyId: string;
+	propertyId?: string;
 	tentantId: string;
 	ownerId?: string;
 	startDate: string;
 	endDate: string;
 	isActive: boolean;
-	price: string;
+	price: number;
 	createdAt?: Date;
 	updatedAt?: Date;
 }
@@ -71,7 +71,16 @@ export const useContractsStore = create<IUseContractsStore>(() => ({
   },
 
   async updateContract(data: IContract) {
-    await api.put(`/contracts/${data.id}`, data)
+    await api.put(`/contracts/${data.id}`, {
+      tentantId: data.tentantId,
+      ownerId: data.ownerId,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      isActive: data.isActive,
+      price: data.price,
+      created_at: data.createdAt,
+      updated_at: data.updatedAt
+    })
   },
 
   async deleteContract(id: string) {
