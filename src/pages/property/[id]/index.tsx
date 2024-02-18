@@ -5,8 +5,9 @@ import { IoLocationOutline } from "react-icons/io5";
 
 import Container from "@/components/Conateiner";
 import { IProperty, usePropertyStore } from "@/stores/property";
+import { LayoutRoot } from "@/layout/root";
 
-function Property() {
+export default function Property() {
   const { getProperty } = usePropertyStore();
   const [property, setProperty] = useState<IProperty | null>(null);
   const router = useRouter();
@@ -39,9 +40,9 @@ function Property() {
         <title>Propriedade</title>
       </Head>
 
-      <Container>
-        <main className="sm:flex sm:flex-row-reverse sm:justify-between sm:gap-9">
-          <div className="h-max w-full mt-5 sm:min-w-min sm:max-w-max p-7 bg-white border border-gray5 rounded-b-lg flex flex-col sm:relative sm:z-10 sm:-mt-10 sm:p-9 sm:flex-col sm:gap-5 sm:rounded-lg">
+      <Container className="mt-12">
+        <main className="flex flex-col sm:flex-row sm:items-center sm:gap-5">
+          <div className="h-max w-full sm:min-w-min sm:max-w-max p-7 bg-white border border-gray5 rounded-b-lg flex flex-col sm:relative sm:z-10 sm:-mt-10 sm:p-9 sm:flex-col sm:gap-5 sm:rounded-lg">
             <div className="font-medium flex items-center gap-4">
               <p className="text-gray1">{property?.name}</p>
             </div>
@@ -53,7 +54,7 @@ function Property() {
             </div>
           </div>
 
-          <div className="w-full mt-9 flex flex-col gap-9 max-w-3xl">
+          <div className="w-full mt-2 flex flex-col gap-9 max-w-3xl">
             <section className="max-w-xl">
               <h2 className="text-2xl text-gray1 font-semibold leading-normal">
                 {property?.name}
@@ -77,6 +78,7 @@ function Property() {
             </section>
           </div>
         </main>
+
         <button
           className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
           onClick={() => {
@@ -90,4 +92,4 @@ function Property() {
   );
 }
 
-export default Property;
+Property.Layout = LayoutRoot;
