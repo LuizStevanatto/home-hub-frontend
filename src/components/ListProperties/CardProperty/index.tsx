@@ -37,6 +37,14 @@ function CardProperty({ property }: ICardPropertyProps) {
     if (user && user.isAdmin) {
       route = route;
       router.push(route);
+    } else if (!user) {
+      toast("Você precisa estar logado para visualizar esta propriedade!", {
+        position: "top-center",
+        autoClose: 5000,
+        type: "error",
+      });
+
+      route = "/login";
     } else {
       toast("Você não é um usuário administrador!", {
         position: "top-center",

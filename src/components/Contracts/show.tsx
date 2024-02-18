@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "../Button";
 import { IContract, useContractsStore } from "@/stores/contracts";
 import { useRouter } from "next/router";
 import { BoxContract } from "./components/box-contract";

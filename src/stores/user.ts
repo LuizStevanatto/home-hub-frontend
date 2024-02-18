@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { destroyCookie, setCookie } from "nookies";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { create } from "zustand";
 
 interface ILoginResponse {
@@ -66,7 +66,9 @@ const useUserStore = create<IUseUserStore>((set, get) => ({
     })
 
     const { accessToken }: ILoginResponse = response.data;
-
+    if (accessToken) {
+      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    }
     setCookie(null, "@homeHub:user_token", accessToken, {
       maxAge: 60 * 60 * 24, // 1 day
       path: "/",

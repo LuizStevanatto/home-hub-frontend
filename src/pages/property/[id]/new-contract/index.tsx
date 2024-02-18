@@ -6,6 +6,10 @@ function NewContract() {
     <>
       <Head>Novo Contrato</Head>
 
+      <span className="flex justify-center text-xl font-bold mt-2">
+        Novo Contrato
+      </span>
+
       <FormRegisterNewContract />
     </>
   );

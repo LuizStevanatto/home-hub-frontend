@@ -6,6 +6,10 @@ function EditContractPage() {
     <>
       <Head>Editar Contrato</Head>
 
+      <span className="flex justify-center text-xl font-bold mt-2">
+        Edite seu Contrato
+      </span>
+
       <EditContract />
     </>
   );

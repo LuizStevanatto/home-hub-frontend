@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import { IContract } from "@/stores/contracts";
 import { useRouter } from "next/router";
+import React from "react";
 
 type BoxContractProps = {
   contract: IContract;
@@ -19,7 +20,7 @@ export function BoxContract(props: BoxContractProps) {
   return (
     <div
       key={contract.id}
-      className="flex flex-col  w-[330px] h-[250px] bg-neutral-300 rounded-md mt-8 p-4"
+      className="flex flex-col gap-2 w-[330px] h-[250px] bg-neutral-300 rounded-md mt-8 p-4"
     >
       <span className="text-xl font-bold">Informações do Contrato</span>
 

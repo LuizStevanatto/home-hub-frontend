@@ -1,54 +1,44 @@
 import { useEffect } from "react";
 import { parseCookies } from "nookies";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Poppins } from "next/font/google";
 import type { AppProps } from "next/app";
-import api from "@/services/api";
 import useUserStore, { IUser } from "@/stores/user";
 import "@/styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { LayoutRoot } from "@/layout/root";
-
-const poppins = Poppins({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-});
+import { useRouter } from "next/router";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { signIn } = useUserStore();
+  const router = useRouter();
+  const { signIn, user } = useUserStore();
 
-  const token = parseCookies()["@webcasas:user_token"];
-  if (token) {
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  }
+  const accessToken = parseCookies()["@homeHub:user_token"];
 
   useEffect(() => {
     async function handleAutoLogin() {
       try {
-        const resp = await api.get("/sessions");
-        const user: IUser = resp.data;
         await signIn({
-          email: user.email,
-          password: user.password,
+          email: String(user?.email),
+          password: String(user?.password),
         });
-      } catch (error) {}
+
+        router.push("/");
+      } catch (error) {
+        console.log(error);
+
+        router.push("/login");
+      }
     }
 
-    if (token) {
+    if (accessToken) {
       handleAutoLogin();
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signIn, accessToken, user?.email, user?.password]);
 
   return (
     <>
-      {/* <style jsx global>
-        {`
-          html {
-            font-family: ${poppins.style.fontFamily};
-          }
-        `}
-      </style> */}
       <ChakraProvider>
         <LayoutRoot>
           <Component {...pageProps} />

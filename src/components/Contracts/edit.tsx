@@ -18,7 +18,7 @@ function EditContract() {
   const router = useRouter();
   const [contract, setContract] = React.useState<IContract | null>(null);
 
-  const { updateContract, getContract } = useContractsStore();
+  const { updateContract, getContract, deleteContract } = useContractsStore();
   const { user } = useUserStore();
 
   const {
@@ -30,16 +30,16 @@ function EditContract() {
     resolver: zodResolver(formNewContract),
   });
 
-  const contractId = router.query.contractId;
+  const contractId = String(router.query.contractId);
 
-  const handleCheckRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue("isActive", e.target.checked);
+  const handleCheckRadio = (value: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("isActive", value.target.checked);
   };
 
   async function handleSubmitData(data: FormRegisterProps) {
     try {
       await updateContract({
-        id: String(contractId),
+        id: contractId,
         startDate: data.startDate,
         endDate: data.endDate,
         isActive: data.isActive,
@@ -57,11 +57,39 @@ function EditContract() {
     } catch (error) {
       console.log(error);
 
-      toast("Houve algum erro", {
-        type: "error",
+      toast(
+        "Houve algum erro. Tente novamente ou entre em contato com o suporte!",
+        {
+          type: "error",
+          position: "top-center",
+          autoClose: 5000,
+        }
+      );
+    }
+  }
+
+  async function handleContractDelete() {
+    try {
+      await deleteContract(contractId);
+
+      toast("Contrato Excluído!", {
+        type: "success",
         position: "top-center",
         autoClose: 5000,
       });
+
+      router.push("/contracts");
+    } catch (error) {
+      console.log(error);
+
+      toast(
+        "Houve algum erro. Tente novamente ou entre em contato com o suporte!",
+        {
+          type: "error",
+          position: "top-center",
+          autoClose: 5000,
+        }
+      );
     }
   }
 
@@ -130,7 +158,7 @@ function EditContract() {
         <FormLabel htmlFor="isActive">Ativo?</FormLabel>
         <Checkbox
           {...register("isActive")}
-          defaultChecked={contract?.isActive || true}
+          defaultChecked={contract?.isActive || false}
           onChange={handleCheckRadio}
           className="-mt-[0.45rem]"
         />
@@ -140,6 +168,13 @@ function EditContract() {
       </div>
 
       <Button type="submit">Enviar</Button>
+      <Button
+        type="button"
+        className="bg-red-500 hover:bg-red-600"
+        onClick={handleContractDelete}
+      >
+        Excluir Contrato
+      </Button>
     </Form>
   );
 }

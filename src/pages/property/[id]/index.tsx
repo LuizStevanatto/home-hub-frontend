@@ -83,7 +83,7 @@ function Property() {
             router.push(`/property/${propertyId}/new-contract`);
           }}
         >
-          Solicitar Contrato
+          Novo Contrato
         </button>
       </Container>
     </>

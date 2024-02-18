@@ -12,6 +12,7 @@ import useUserStore from "@/stores/user";
 import { useRouter } from "next/router";
 import Button from "../Button";
 import FormErrorText from "../Form/FormErrorText";
+import { IProperty, usePropertyStore } from "@/stores/property";
 
 export type FormRegisterProps = z.infer<typeof formNewContract>;
 
@@ -19,6 +20,10 @@ function FormRegisterNewContract() {
   const router = useRouter();
   const { user } = useUserStore();
   const { createContract } = useContractsStore();
+
+  const [property, setProperty] = React.useState<IProperty | null>(null);
+  const { getProperty } = usePropertyStore();
+
   const {
     register,
     handleSubmit,
@@ -27,7 +32,7 @@ function FormRegisterNewContract() {
   } = useForm<FormRegisterProps>({
     resolver: zodResolver(formNewContract),
   });
-  const propertyId = router.query.id;
+  const propertyId = String(router.query.id);
 
   const handleCheckRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue("isActive", e.target.checked);
@@ -39,6 +44,7 @@ function FormRegisterNewContract() {
         startDate: data.startDate,
         endDate: data.endDate,
         propertyId: String(propertyId),
+        ownerId: String(property?.ownerId),
         isActive: data.isActive,
         price: Number(data.price),
         tentantId: String(user?.id),
@@ -47,6 +53,17 @@ function FormRegisterNewContract() {
       console.log(error);
     }
   }
+
+  const getPropertyInDb = async () => {
+    const getPropertyById = await getProperty(propertyId);
+
+    setProperty(getPropertyById);
+  };
+
+  React.useEffect(() => {
+    getPropertyInDb();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Form
