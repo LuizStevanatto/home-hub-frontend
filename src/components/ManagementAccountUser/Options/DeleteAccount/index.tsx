@@ -49,7 +49,7 @@ function DeleteAccount() {
         await deleteUser(String(user?.id));
 
         toast.success("Conta excluida");
-        router.replace("/");
+        router.replace("/login");
       }
     } catch (error) {
       if (isAxiosError(error)) {
