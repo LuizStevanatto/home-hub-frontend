@@ -2,19 +2,19 @@ import api from "@/services/api";
 import { create } from "zustand";
 
 export interface IProperty {
-  id: string;
+  id?: string;
 	name: string;
 	address: string;
 	city: string;
 	state: string;
 	zipCode: string;
-	country: string;
+	country?: string;
 	description: string;
 	price: number;
-	isAvailable: boolean;
-	ownerId: string;
-	createdAt: Date;
-	updatedAt: Date;
+	isAvailable?: boolean;
+	ownerId?: string;
+	createdAt?: Date;
+	updatedAt?: Date;
 }
 
 interface IUsePropertyStore {
@@ -44,7 +44,18 @@ export const usePropertyStore = create<IUsePropertyStore>(() => ({
   },
 
   async updateProperty(data: IProperty) {
-    await api.put(`property/${data.id}`, data)
+    await api.put(`property/${data.id}`, {
+      number: data.id,
+      zipCode: data.zipCode,
+      state: data.state,
+      city: data.city,
+      address: data.address,
+      name: data.name,
+      description: data.description,
+      price: Number(data.price),
+      country: data.country,
+      ownerId: data.ownerId
+    })
   },
 
   async deleteProperty(id: string) {
