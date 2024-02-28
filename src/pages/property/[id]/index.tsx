@@ -6,12 +6,13 @@ import { IoLocationOutline } from "react-icons/io5";
 import Container from "@/components/Conateiner";
 import { IProperty, usePropertyStore } from "@/stores/property";
 import { LayoutRoot } from "@/layout/root";
+import { toast } from "react-toastify";
 
 export default function Property() {
-  const { getProperty } = usePropertyStore();
+  const { getProperty, deleteProperty } = usePropertyStore();
   const [property, setProperty] = useState<IProperty | null>(null);
   const router = useRouter();
-  const propertyId = router.query.id;
+  const propertyId = String(router.query.id);
 
   const getPropertyInDb = React.useCallback(async () => {
     const getPropertyById = await getProperty(String(propertyId));
@@ -30,6 +31,31 @@ export default function Property() {
       style: "currency",
       maximumFractionDigits: 0,
     });
+  }
+
+  async function handleDeleteProperty() {
+    try {
+      await deleteProperty(propertyId);
+
+      toast("Propriedade deletada com sucesso!", {
+        position: "top-center",
+        type: "success",
+        autoClose: 5000,
+      });
+
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+
+      toast(
+        "Não foi possível deletar a propriedade. Tente novamente ou entre em contato com o suporte!",
+        {
+          position: "top-center",
+          type: "error",
+          autoClose: 5000,
+        }
+      );
+    }
   }
 
   const priceFormatted = handleFormatedCurrency(property?.price);
@@ -79,14 +105,32 @@ export default function Property() {
           </div>
         </main>
 
-        <button
-          className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
-          onClick={() => {
-            router.push(`/property/${propertyId}/new-contract`);
-          }}
-        >
-          Novo Contrato
-        </button>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+          <button
+            className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
+            onClick={() => {
+              router.push(`/property/${propertyId}/edit-property`);
+            }}
+          >
+            Editar propriedade
+          </button>
+
+          <button
+            className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
+            onClick={() => {
+              router.push(`/property/${propertyId}/new-contract`);
+            }}
+          >
+            Novo Contrato
+          </button>
+
+          <button
+            className="bg-red-500 hover:bg-red-600 p-4 rounded-lg text-white font-semibold mt-8"
+            onClick={handleDeleteProperty}
+          >
+            Deletar Contrato
+          </button>
+        </div>
       </Container>
     </>
   );
