@@ -8,6 +8,7 @@ const formPropertySchema = z.object({
   description: string({
     required_error: "Ifnrome um breve descrição sobre o imóvel",
   }),
+  number: z.string().min(1, 'O número é obrigatório!'),
   price: z.string().min(1, 'Informar o preço é obrigatório'),
   zipCode: z.string().min(1, 'Informar o CEP é obrigatório!'),
   country: z.string().min(1, 'O país é obrigatório'),
@@ -56,6 +57,7 @@ const formPropertySchema = z.object({
       }
     }),
     address: z.string().min(1, 'Informar o endereço é obrigatório!'),
+    isAvailable: z.boolean(),
 });
 
 export default formPropertySchema;
