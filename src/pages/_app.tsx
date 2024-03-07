@@ -44,7 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </LayoutRoot>
       </ChakraProvider>
-      <ToastContainer autoClose={1500} />
+      <ToastContainer autoClose={5000} position="top-center" />
     </>
   );
 }
