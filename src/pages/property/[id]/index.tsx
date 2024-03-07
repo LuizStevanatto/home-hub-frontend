@@ -24,7 +24,7 @@ export default function Property() {
     getPropertyInDb();
   }, [getPropertyInDb]);
 
-  function handleFormatedCurrency(value: number | undefined) {
+  function handleFormattedCurrency(value: number | undefined) {
     if (value == undefined) return null;
     return value.toLocaleString("pt-BR", {
       currency: "BRL",
@@ -58,7 +58,7 @@ export default function Property() {
     }
   }
 
-  const priceFormatted = handleFormatedCurrency(property?.price);
+  const priceFormatted = handleFormattedCurrency(property?.price);
 
   return (
     <>
@@ -115,14 +115,16 @@ export default function Property() {
             Editar propriedade
           </button>
 
-          <button
-            className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
-            onClick={() => {
-              router.push(`/property/${propertyId}/new-contract`);
-            }}
-          >
-            Novo Contrato
-          </button>
+          {!property?.isAvailable && (
+            <button
+              className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
+              onClick={() => {
+                router.push(`/property/${propertyId}/new-contract`);
+              }}
+            >
+              Novo Contrato
+            </button>
+          )}
 
           <button
             className="bg-red-500 hover:bg-red-600 p-4 rounded-lg text-white font-semibold mt-8"
