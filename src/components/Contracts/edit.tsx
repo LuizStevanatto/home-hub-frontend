@@ -5,7 +5,7 @@ import { Checkbox, FormLabel } from "@chakra-ui/react";
 import FormInput from "../Form/FormInput";
 import FormErrorText from "../Form/FormErrorText";
 import Button from "../Button";
-import { FormRegisterProps } from "../FormContract";
+import { FormRegisterProps } from "../FormRegisterNewContract";
 import formNewContract from "@/schemas/formNewContract";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -13,6 +13,7 @@ import { IContract, useContractsStore } from "@/stores/contracts";
 import useUserStore from "@/stores/user";
 import React from "react";
 import { toast } from "react-toastify";
+import {dateFormat} from "@/utils/date-format";
 
 function EditContract() {
   const router = useRouter();
@@ -39,17 +40,17 @@ function EditContract() {
   async function handleSubmitData(data: FormRegisterProps) {
     try {
       await updateContract({
-        id: contractId,
+        ...contract,
         startDate: data.startDate,
         endDate: data.endDate,
         isActive: data.isActive,
         price: Number(data.price),
         tentantId: String(user?.id),
+        updatedAt: new Date(),
       });
 
       toast("Contrato atualizado", {
         type: "success",
-        position: "top-center",
         autoClose: 5000,
       });
 
@@ -61,7 +62,6 @@ function EditContract() {
         "Houve algum erro. Tente novamente ou entre em contato com o suporte!",
         {
           type: "error",
-          position: "top-center",
           autoClose: 5000,
         }
       );
@@ -94,20 +94,23 @@ function EditContract() {
   }
 
   const getContractByIdInDb = React.useCallback(async () => {
-    const contractInDB = await getContract(String(contractId));
+    const contractInDB = await getContract(contractId);
 
     setContract(contractInDB);
   }, [contractId, getContract]);
 
   const fillInFields = () => {
-    setValue("startDate", contract?.startDate || "");
-    setValue("endDate", contract?.endDate || "");
+    const newStartDate = dateFormat(contract?.startDate || '')
+    const newEndDate = dateFormat(contract?.endDate || '');
+
+    setValue("startDate", newStartDate);
+    setValue("endDate", newEndDate);
     setValue("isActive", contract?.isActive || false);
     setValue("price", String(contract?.price) || "");
   };
 
   React.useEffect(() => {
-    if (contract) {
+    if (contract !== null) {
       fillInFields();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,8 +129,6 @@ function EditContract() {
       <FormTitle>Dados do Contrato</FormTitle>
       <FormLabel htmlFor="startDate">Data Inicial</FormLabel>
       <FormInput
-        type="date"
-        defaultValue={contract?.startDate}
         id="startDate"
         register={register("startDate")}
       />
@@ -137,8 +138,6 @@ function EditContract() {
 
       <FormLabel htmlFor="endDate">Data de Término</FormLabel>
       <FormInput
-        type="date"
-        defaultValue={contract?.endDate}
         id="endDate"
         register={register("endDate")}
       />
@@ -149,7 +148,6 @@ function EditContract() {
       <FormLabel htmlFor="price">Valor</FormLabel>
       <FormInput
         id="price"
-        defaultValue={contract?.price}
         register={register("price")}
       />
       {errors.price && <FormErrorText>{errors.price.message}</FormErrorText>}
@@ -158,7 +156,6 @@ function EditContract() {
         <FormLabel htmlFor="isActive">Ativo?</FormLabel>
         <Checkbox
           {...register("isActive")}
-          defaultChecked={contract?.isActive || false}
           onChange={handleCheckRadio}
           className="-mt-[0.45rem]"
         />
