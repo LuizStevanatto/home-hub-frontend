@@ -2,6 +2,7 @@ import Button from "@/components/Button";
 import { IContract } from "@/stores/contracts";
 import { useRouter } from "next/router";
 import React from "react";
+import {dateFormat} from "@/utils/date-format";
 
 type BoxContractProps = {
   contract: IContract;
@@ -29,7 +30,7 @@ export function BoxContract(props: BoxContractProps) {
           Data de Início -{" "}
           <strong>
             {contract.startDate !== undefined
-              ? contract.startDate
+              ? `${dateFormat(contract.startDate)}`
               : "Não informado"}
           </strong>
         </span>
@@ -38,7 +39,7 @@ export function BoxContract(props: BoxContractProps) {
           Data de término -{" "}
           <strong>
             {contract.endDate !== undefined
-              ? contract.endDate
+              ? `${dateFormat(contract.endDate)}`
               : "Não informado"}
           </strong>
         </span>
