@@ -5,6 +5,7 @@ export interface IProperty {
   id?: string;
 	name: string;
 	address: string;
+    number: string
 	city: string;
 	state: string;
 	zipCode: string;
