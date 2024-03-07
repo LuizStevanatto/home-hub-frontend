@@ -6,6 +6,7 @@ import {
 import { RxExit } from "react-icons/rx";
 import { FaFileContract } from "react-icons/fa";
 import { BsHouseAdd } from "react-icons/bs";
+import useUserStore from "@/stores/user";
 
 interface IUserMenuDesktop {
   handleCloseUserMenu: () => void;
@@ -16,6 +17,8 @@ function UserMenuDesktop({
   handleCloseUserMenu,
   handleLogout,
 }: IUserMenuDesktop) {
+  const { user } = useUserStore();
+
   return (
     <>
       <div
@@ -31,20 +34,26 @@ function UserMenuDesktop({
           <HiOutlineClipboardDocumentList size={18} />
           Meu cadastro
         </Link>
-        <Link
-          href="/my-ads"
-          className="py-3 px-4 hover:bg-gray7 flex items-center gap-3"
-        >
-          <HiOutlineSquares2X2 size={18} />
-          Meus Anúncios
-        </Link>
-        <Link
-          href="/form-property"
-          className="py-3 px-4 hover:bg-gray7 flex items-center gap-3"
-        >
-          <BsHouseAdd size={18} />
-          Anunciar
-        </Link>
+
+        {user?.isAdmin && (
+          <>
+            <Link
+              href="/my-ads"
+              className="py-3 px-4 hover:bg-gray7 flex items-center gap-3"
+            >
+              <HiOutlineSquares2X2 size={18} />
+              Meus Anúncios
+            </Link>
+
+            <Link
+              href="/form-property"
+              className="py-3 px-4 hover:bg-gray7 flex items-center gap-3"
+            >
+              <BsHouseAdd size={18} />
+              Anunciar
+            </Link>
+          </>
+        )}
 
         <Link
           href="/contracts"
