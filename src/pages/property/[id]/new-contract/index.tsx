@@ -1,4 +1,4 @@
-import FormRegisterNewContract from "@/components/FormContract";
+import FormRegisterNewContract from "@/components/FormRegisterNewContract";
 import Head from "next/head";
 
 function NewContract() {

@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import formPropertySchema from "@/schemas/formPropertySchema";
-import { handleCreateMuskCurrency } from "@/utils/inputMaskPhone";
 import Button from "../Button";
 import FormErrorText from "../Form/FormErrorText";
 import FormInput from "../Form/FormInput";
@@ -76,11 +75,14 @@ function FormAddProperty() {
     try {
       await createProperty({
         ...data,
-        id: String(user?.id),
+        price: Number(data.price),
+        ownerId: String(user?.id),
       });
 
-      await router.push(`property/${String(user?.id)}`);
-    } catch (error) {}
+      await router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
 
     setIsLoading(false);
   }
@@ -96,19 +98,27 @@ function FormAddProperty() {
         <FormLabel htmlFor="title">Título*</FormLabel>
         <FormInput id="title" register={register("name")} />
 
-        <FormLabel htmlFor="description">Descrição*</FormLabel>
+        <FormLabel htmlFor="description">Descrição *</FormLabel>
         <FormTextarea id="description" register={register("description")} />
         <FormErrorText>{errors.description?.message}</FormErrorText>
 
-        <FormInput
-          id="price"
-          onKeyUp={handleCreateMuskCurrency}
-          maxLength={17}
-          register={register("price")}
-        />
+        <FormLabel htmlFor="number">Número *</FormLabel>
+        <FormInput id="number" register={register("number")} />
+        <FormErrorText>{errors.number?.message}</FormErrorText>
+
+        <FormLabel htmlFor="price">Valor *</FormLabel>
+        <FormInput id="price" register={register("price")} />
         <FormErrorText>{errors.price?.message}</FormErrorText>
 
-        <FormLabel htmlFor="state">Estado*</FormLabel>
+        <FormLabel htmlFor="country">País *</FormLabel>
+        <FormInput id="country" register={register("country")} />
+        <FormErrorText>{errors.country?.message}</FormErrorText>
+
+        <FormLabel htmlFor="zipCode">CEP *</FormLabel>
+        <FormInput id="zipCode" register={register("zipCode")} />
+        <FormErrorText>{errors.zipCode?.message}</FormErrorText>
+
+        <FormLabel htmlFor="state">Estado *</FormLabel>
         <FormSelect
           id="state"
           defaultValue=""
@@ -129,7 +139,7 @@ function FormAddProperty() {
         </FormSelect>
         <FormErrorText>{errors.state?.message}</FormErrorText>
 
-        <FormLabel htmlFor="city">Cidade*</FormLabel>
+        <FormLabel htmlFor="city">Cidade *</FormLabel>
         <FormSelect id="city" defaultValue="" register={register("city")}>
           <option value="" disabled>
             Selecionar cidade
@@ -141,6 +151,10 @@ function FormAddProperty() {
           ))}
         </FormSelect>
         <FormErrorText>{errors.city?.message}</FormErrorText>
+
+        <FormLabel htmlFor="address">Endereço *</FormLabel>
+        <FormInput id="address" register={register("address")} />
+        <FormErrorText>{errors.address?.message}</FormErrorText>
 
         <Button type="submit" disabled={isLoading} className="mt-9">
           Anunciar

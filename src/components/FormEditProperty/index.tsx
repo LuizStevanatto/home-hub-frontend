@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { IProperty, usePropertyStore } from "@/stores/property";
 import useUserStore from "@/stores/user";
 import { toast } from "react-toastify";
+import { Checkbox } from "@chakra-ui/react";
 
 interface IState {
   id: number;
@@ -28,6 +29,7 @@ interface ICity {
 
 export function FormEditProperty() {
   const { user } = useUserStore();
+  const [isCheck, setIsCheck] = useState<boolean>(false);
   const [property, setProperty] = React.useState<IProperty | null>(null);
   const { updateProperty, getProperty } = usePropertyStore();
   const [states, setStates] = useState([] as IState[]);
@@ -57,9 +59,11 @@ export function FormEditProperty() {
 
     try {
       await updateProperty({
+        ...property,
         id: propertyId,
         country: data.country,
         zipCode: data.zipCode,
+        number: data.number,
         state: data.state,
         city: data.city,
         address: data.address,
@@ -67,6 +71,8 @@ export function FormEditProperty() {
         description: data.description,
         price: Number(data.price),
         ownerId: property?.ownerId,
+        isAvailable: isCheck,
+        updatedAt: new Date(),
       });
 
       toast("Propriedade atualizada com sucesso!", {
@@ -75,7 +81,7 @@ export function FormEditProperty() {
         autoClose: 5000,
       });
 
-      await router.push(`/property/${String(user?.id)}`);
+      router.push(`/property/${propertyId}`);
     } catch (error) {
       toast("Não foi possível alterar a propriedade!", {
         position: "top-center",
@@ -97,12 +103,14 @@ export function FormEditProperty() {
     setValue("zipCode", property?.zipCode || "");
     setValue("country", property?.country || "");
     setValue("state", property?.state || "");
+    setValue("number", property?.number || "");
     setUfState(property?.state || "");
     setValue("city", property?.city || "");
     setValue("address", property?.address || "");
     setValue("name", property?.name || "");
     setValue("description", property?.description || "");
-    setValue("isAvailable", property?.isAvailable || false);
+    setValue("isAvailable", property?.isAvailable || isCheck);
+    setIsCheck(property?.isAvailable || isCheck);
     setValue("price", Number(property?.price));
   };
 
@@ -161,6 +169,14 @@ export function FormEditProperty() {
           register={register("description")}
         />
         <FormErrorText>{errors.description?.message}</FormErrorText>
+
+        <FormLabel htmlFor="number">Número *</FormLabel>
+        <FormInput
+          id="number"
+          defaultValue={property?.number}
+          register={register("number")}
+        />
+        <FormErrorText>{errors.number?.message}</FormErrorText>
 
         <FormLabel htmlFor="price">Valor *</FormLabel>
         <FormInput
@@ -231,6 +247,17 @@ export function FormEditProperty() {
           register={register("address")}
         />
         <FormErrorText>{errors.address?.message}</FormErrorText>
+
+        <div className="flex items-center gap-4">
+          <FormLabel htmlFor="isAvailable">Disponível:</FormLabel>
+          <Checkbox
+            id="isAvailable"
+            defaultChecked={property?.isAvailable}
+            onChange={() => setIsCheck(!isCheck)}
+            className="mt-3"
+          />
+          <FormErrorText>{errors.isAvailable?.message}</FormErrorText>
+        </div>
 
         <Button type="submit" disabled={isLoading} className="mt-9">
           Alterar
