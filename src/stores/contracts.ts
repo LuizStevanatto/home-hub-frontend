@@ -12,6 +12,15 @@ export interface IContract {
 	price: number;
 	createdAt?: Date;
 	updatedAt?: Date;
+  propertyId?: string;
+  tentantId: string;
+  ownerId?: string;
+  startDate: string;
+  endDate: string;
+  isActive: boolean;
+  price: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface IUseContractsStore {
