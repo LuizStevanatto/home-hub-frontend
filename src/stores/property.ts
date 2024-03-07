@@ -3,6 +3,19 @@ import { create } from "zustand";
 
 export interface IProperty {
   id?: string;
+  name: string;
+  address: string;
+  number: string
+  city: string;
+  state: string;
+  zipCode: string;
+  country?: string;
+  description: string;
+  price: number;
+  isAvailable?: boolean;
+  ownerId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface IUsePropertyStore {
