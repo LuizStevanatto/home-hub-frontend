@@ -90,7 +90,7 @@ export default function Property() {
               <h3 className="text-xl text-brand1 font-semibold ">Detalhes do imóvel</h3>
 
               <p>Valor: <strong>{priceFormatted}</strong></p>
-              <span>Á venda: <strong>{property?.isAvailable ? "Não" : "Sim"}</strong></span>
+              <span>Á venda: <strong>{property?.isAvailable ? "Sim" : "Não"}</strong></span>
             </section>
           </div>
 
@@ -104,7 +104,7 @@ export default function Property() {
               Editar propriedade
             </button>
 
-            {!property?.isAvailable && (
+            {property?.isAvailable && (
                 <button
                     className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
                     onClick={() => {

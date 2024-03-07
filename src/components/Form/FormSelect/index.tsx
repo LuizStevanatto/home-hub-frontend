@@ -16,7 +16,7 @@ function FormSelect({ children, register, ...rest }: IFormSelect) {
 
   return (
     <select
-      className={`w-full py-3 px-4 text-sm text-gray1 bg-white border border-gray5 outline-brand1 rounded-lg ${className}`}
+      className={`w-full sm:w-[380px] py-3 px-4 text-sm text-gray1 bg-white border border-gray5 outline-brand1 rounded-lg ${className}`}
       {...register}
       {...rest}
     >

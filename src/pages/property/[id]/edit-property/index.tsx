@@ -3,7 +3,7 @@ import Head from "next/head";
 
 export default function EditProperty() {
   return (
-    <>
+    <div className='flex justify-center'>
       <Head>Editar Propriedade</Head>
 
       <div className="p-8">
@@ -11,6 +11,6 @@ export default function EditProperty() {
 
         <FormEditProperty />
       </div>
-    </>
+    </div>
   );
 }

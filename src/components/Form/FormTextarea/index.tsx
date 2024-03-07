@@ -12,7 +12,7 @@ interface IFormTextarea extends IFormTextareaRest {
 function FormTextarea({ children, register, ...rest }: IFormTextarea) {
   return (
     <textarea
-      className=" h-28 w-full py-3 px-4 text-gray1 text-sm border border-gray5 rounded-lg outline-brand1"
+      className="h-28 w-full sm:w-[380px] py-3 px-4 text-gray1 text-sm border border-gray5 rounded-lg outline-brand1"
       {...register}
       {...rest}
     >
