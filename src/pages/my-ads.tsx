@@ -7,9 +7,7 @@ function MyAds() {
     <>
       <Container>
         <main>
-          <h2 className="mt-24 mb-9 text-3xl text-gray1 font-medium">
-            Meus aúncios
-          </h2>
+          <h2 className="my-4 text-3xl text-gray1 font-bold">Meus aúncios</h2>
           <MyAdsListPropertiesProvider>
             <ListPropertiesMyAds />
           </MyAdsListPropertiesProvider>

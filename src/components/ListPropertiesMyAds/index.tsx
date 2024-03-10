@@ -4,7 +4,7 @@ import useMyListProperties from "@/contexts/MyAdsListPropertiesContext/hook";
 function ListPropertiesMyAds() {
   const { properties } = useMyListProperties();
   return (
-    <ul className="p-6 border border-gray5 rounded-lg flex flex-col gap-4">
+    <ul className="py-4 rounded-lg flex flex-col sm:grid sm:grid-cols-3 gap-4">
       {properties.map((property) => (
         <CardPropertyMyAds key={property.id} property={property} />
       ))}

@@ -15,13 +15,13 @@ function CardPropertyMyAds({ property }: ICardPropertyMyAds) {
     maximumFractionDigits: 0,
   });
 
-  const propertyDateTimeCreated = new Date(createdAt);
+  const propertyDateTimeCreated = new Date(String(createdAt));
   const propertyDate = propertyDateTimeCreated.toLocaleDateString();
   const propertyTime = propertyDateTimeCreated.toLocaleTimeString();
   const propertyTimeFormatted = propertyTime.slice(0, 5);
 
   return (
-    <li className="flex flex-col sm:flex-row sm:items-center gap-4">
+    <li className="flex flex-col bg-neutral-300 rounded-md p-4 w-[370px] sm:flex-row sm:items-center gap-4">
       <div className=" flex flex-col gap-3">
         <h2 className="text-lg text-gray1 font-semibold leading-normal line-clamp-2">
           {name}
@@ -41,7 +41,7 @@ function CardPropertyMyAds({ property }: ICardPropertyMyAds) {
           </span>
         </div>
         <div className="text-sm text-brand1 flex items-center gap-5">
-          <ModalDeleteProperty propertyId={id} />
+          <ModalDeleteProperty propertyId={String(id)} />
           <ModalDisableProperty property={property} />
         </div>
       </div>
