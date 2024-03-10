@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, ChangeEvent } from "react";
+import React, { useState, useRef, useEffect, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import formPropertySchema from "@/schemas/formPropertySchema";
@@ -12,6 +12,7 @@ import apiIbge from "@/services/apiIbge";
 import { useRouter } from "next/router";
 import { IProperty, usePropertyStore } from "@/stores/property";
 import useUserStore from "@/stores/user";
+import {Checkbox} from "@chakra-ui/react";
 
 interface IState {
   id: number;
@@ -91,77 +92,111 @@ function FormAddProperty() {
     <form
       encType="multipart/form-data"
       onSubmit={handleSubmit(handleAddProperty)}
-      className="mt-12 p-9 border border-gray5 rounded-lg"
+      className="mt-6 rounded-lg"
       ref={formRef}
     >
       <div className="max-w-2xl">
         <FormLabel htmlFor="title">Título*</FormLabel>
-        <FormInput id="title" register={register("name")} />
+        <FormInput id="title" register={register("name")}/>
+        <FormErrorText>{errors.name?.message}</FormErrorText>
 
         <FormLabel htmlFor="description">Descrição *</FormLabel>
-        <FormTextarea id="description" register={register("description")} />
+        <FormTextarea id="description" register={register("description")}/>
         <FormErrorText>{errors.description?.message}</FormErrorText>
 
-        <FormLabel htmlFor="number">Número *</FormLabel>
-        <FormInput id="number" register={register("number")} />
-        <FormErrorText>{errors.number?.message}</FormErrorText>
+        <section className='flex flex-col sm:flex-row sm:items-center gap-4'>
+          <div>
+            <FormLabel htmlFor="number">Número *</FormLabel>
+            <FormInput id="number" register={register("number")}/>
+            <FormErrorText>{errors.number?.message}</FormErrorText>
+          </div>
 
-        <FormLabel htmlFor="price">Valor *</FormLabel>
-        <FormInput id="price" register={register("price")} />
-        <FormErrorText>{errors.price?.message}</FormErrorText>
+          <div>
+            <FormLabel htmlFor="price">Valor *</FormLabel>
+            <FormInput id="price" register={register("price")}/>
+            <FormErrorText>{errors.price?.message}</FormErrorText>
+          </div>
+        </section>
 
-        <FormLabel htmlFor="country">País *</FormLabel>
-        <FormInput id="country" register={register("country")} />
-        <FormErrorText>{errors.country?.message}</FormErrorText>
+        <section className='flex flex-col sm:flex-row sm:items-center gap-4'>
+          <div>
+            <FormLabel htmlFor="country">País *</FormLabel>
+            <FormInput id="country" register={register("country")}/>
+            <FormErrorText>{errors.country?.message}</FormErrorText>
+          </div>
 
-        <FormLabel htmlFor="zipCode">CEP *</FormLabel>
-        <FormInput id="zipCode" register={register("zipCode")} />
-        <FormErrorText>{errors.zipCode?.message}</FormErrorText>
+          <div>
+            <FormLabel htmlFor="zipCode">CEP *</FormLabel>
+            <FormInput id="zipCode" register={register("zipCode")}/>
+            <FormErrorText>{errors.zipCode?.message}</FormErrorText>
+          </div>
+        </section>
 
-        <FormLabel htmlFor="state">Estado *</FormLabel>
-        <FormSelect
-          id="state"
-          defaultValue=""
-          onChange={(e) => {
-            handleGetUfState(e);
-            register("state").onChange(e);
-          }}
-          register={register("state")}
-        >
-          <option value="" disabled>
-            Selecionar estado
-          </option>
-          {states.map((state) => (
-            <option key={state.id} value={state.sigla}>
-              {state.nome}
-            </option>
-          ))}
-        </FormSelect>
-        <FormErrorText>{errors.state?.message}</FormErrorText>
+        <section className='flex flex-col sm:flex-row sm:items-center gap-4'>
+          <div>
+            <FormLabel htmlFor="state">Estado *</FormLabel>
+            <FormSelect
+                id="state"
+                defaultValue=""
+                onChange={(e) => {
+                  handleGetUfState(e);
+                  register("state").onChange(e);
+                }}
+                register={register("state")}
+            >
+              <option value="" disabled>
+                Selecionar estado
+              </option>
+              {states.map((state) => (
+                  <option key={state.id} value={state.sigla}>
+                    {state.nome}
+                  </option>
+              ))}
+            </FormSelect>
+            <FormErrorText>{errors.state?.message}</FormErrorText>
+          </div>
 
-        <FormLabel htmlFor="city">Cidade *</FormLabel>
-        <FormSelect id="city" defaultValue="" register={register("city")}>
-          <option value="" disabled>
-            Selecionar cidade
-          </option>
-          {cities.map((city) => (
-            <option key={city.id} value={city.nome}>
-              {city.nome}
-            </option>
-          ))}
-        </FormSelect>
-        <FormErrorText>{errors.city?.message}</FormErrorText>
+          <div>
+            <FormLabel htmlFor="city">Cidade *</FormLabel>
+            <FormSelect id="city" defaultValue="" register={register("city")}>
+              <option value="" disabled>
+                Selecionar cidade
+              </option>
+              {cities.map((city) => (
+                  <option key={city.id} value={city.nome}>
+                    {city.nome}
+                  </option>
+              ))}
+            </FormSelect>
+            <FormErrorText>{errors.city?.message}</FormErrorText>
+          </div>
+        </section>
 
-        <FormLabel htmlFor="address">Endereço *</FormLabel>
-        <FormInput id="address" register={register("address")} />
-        <FormErrorText>{errors.address?.message}</FormErrorText>
+        <section className='flex flex-col sm:flex-row sm:items-center gap-4'>
+          <div>
+            <FormLabel htmlFor="address">Endereço *</FormLabel>
+            <FormInput id="address" register={register("address")}/>
+            <FormErrorText>{errors.address?.message}</FormErrorText>
+          </div>
 
-        <Button type="submit" disabled={isLoading} className="mt-9">
+            <div className="flex items-center gap-4">
+              <FormLabel htmlFor="isAvailable">Disponível para negociar:</FormLabel>
+              <Checkbox
+                  {...register('isAvailable')}
+                  // isChecked={isAvaliable}
+                  // onChange={(e) => setIsAvaliable(!isAvaliable)}
+                  className='mt-3'
+              />
+              <FormErrorText>{errors.isAvailable?.message}</FormErrorText>
+            </div>
+          </section>
+
+        <Button type="submit" disabled={isLoading} className="mt-9 sm:w-[380px]">
           Anunciar
         </Button>
       </div>
     </form>
-  );
+);
 }
 
 export default FormAddProperty;

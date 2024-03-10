@@ -13,7 +13,7 @@ import { IContract, useContractsStore } from "@/stores/contracts";
 import useUserStore from "@/stores/user";
 import React from "react";
 import { toast } from "react-toastify";
-import {dateFormat} from "@/utils/date-format";
+import { dateFormat } from "@/utils/date-format";
 
 function EditContract() {
   const router = useRouter();
@@ -100,8 +100,8 @@ function EditContract() {
   }, [contractId, getContract]);
 
   const fillInFields = () => {
-    const newStartDate = dateFormat(contract?.startDate || '')
-    const newEndDate = dateFormat(contract?.endDate || '');
+    const newStartDate = dateFormat(contract?.startDate || "");
+    const newEndDate = dateFormat(contract?.endDate || "");
 
     setValue("startDate", newStartDate);
     setValue("endDate", newEndDate);
@@ -128,28 +128,19 @@ function EditContract() {
     >
       <FormTitle>Dados do Contrato</FormTitle>
       <FormLabel htmlFor="startDate">Data Inicial</FormLabel>
-      <FormInput
-        id="startDate"
-        register={register("startDate")}
-      />
+      <FormInput id="startDate" register={register("startDate")} />
       {errors.startDate && (
         <FormErrorText>{errors.startDate.message}</FormErrorText>
       )}
 
       <FormLabel htmlFor="endDate">Data de Término</FormLabel>
-      <FormInput
-        id="endDate"
-        register={register("endDate")}
-      />
+      <FormInput id="endDate" register={register("endDate")} />
       {errors.endDate && (
         <FormErrorText>{errors.endDate.message}</FormErrorText>
       )}
 
       <FormLabel htmlFor="price">Valor</FormLabel>
-      <FormInput
-        id="price"
-        register={register("price")}
-      />
+      <FormInput id="price" register={register("price")} />
       {errors.price && <FormErrorText>{errors.price.message}</FormErrorText>}
 
       <div className="flex items-center">
@@ -164,10 +155,12 @@ function EditContract() {
         )}
       </div>
 
-      <Button type="submit">Enviar</Button>
+      <Button type="submit" className="w-[378px]">
+        Enviar
+      </Button>
       <Button
         type="button"
-        className="bg-red-500 hover:bg-red-600"
+        className="bg-red-500 hover:bg-red-600 w-[378px]"
         onClick={handleContractDelete}
       >
         Excluir Contrato

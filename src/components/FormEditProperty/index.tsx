@@ -164,6 +164,7 @@ export function FormEditProperty() {
           defaultValue={property?.name}
           register={register("name")}
         />
+        <FormErrorText>{errors.name?.message}</FormErrorText>
 
         <FormLabel htmlFor="description">Descrição *</FormLabel>
         <FormTextarea
