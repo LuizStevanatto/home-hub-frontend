@@ -106,7 +106,7 @@ function FormUpdatePasswordUser() {
         </FormErrorText>
       )}
 
-      <Button type="submit" disabled={isLoading} className="mt-9">
+      <Button type="submit" disabled={isLoading} className="mt-9 w-[378px]">
         Alterar senha
       </Button>
     </Form>

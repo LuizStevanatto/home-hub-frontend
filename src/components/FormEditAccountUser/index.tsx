@@ -78,7 +78,7 @@ function FormEditAccountUser() {
       {errors.password?.message && (
         <FormErrorText>{errors.password.message}</FormErrorText>
       )}
-      <Button type="submit" disabled={isLoading} className="mt-8">
+      <Button type="submit" disabled={isLoading} className="mt-8 w-[378px]">
         Salvar alterações
       </Button>
     </Form>
