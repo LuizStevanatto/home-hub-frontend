@@ -59,14 +59,14 @@ function CardProperty({ property }: ICardPropertyProps) {
   };
 
   return (
-    <li className="flex-shrink-0 p-2  bg-neutral-300 rounded-lg relative">
+    <li className="flex-shrink-0 p-2 w-[420px]  bg-neutral-300 rounded-lg relative">
       <div className="p-5 bg-transparent flex flex-col justify-center ">
         <strong className="h-14 first:text-xl leading-normal text-gray0 font-semibold line-clamp-3">
           {name}
         </strong>
 
         <div className="flex flex-col gap-4 text-base text-left">
-          <span className="w-[365px] truncate overflow-hidden">
+          <span className="max-w-[350px] sm:w-[365px] sm:max-w-[365px] truncate overflow-hidden">
             <strong>Descrição</strong>: {description}
           </span>
           <span>
@@ -75,9 +75,7 @@ function CardProperty({ property }: ICardPropertyProps) {
           <span>
             <strong>País</strong>: {country}
           </span>
-          <span>
-            <strong>CEP:</strong> {zipCode}
-          </span>
+
           <span>
             <strong>Estado</strong>: {state}
           </span>

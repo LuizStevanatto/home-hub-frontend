@@ -7,7 +7,9 @@ import Container from "@/components/Conateiner";
 import { IProperty, usePropertyStore } from "@/stores/property";
 import { LayoutRoot } from "@/layout/root";
 import { toast } from "react-toastify";
+import useUserStore from "@/stores/user";
 export default function Property() {
+  const { user } = useUserStore();
   const { getProperty, deleteProperty } = usePropertyStore();
   const [property, setProperty] = useState<IProperty | null>(null);
   const router = useRouter();
@@ -93,6 +95,22 @@ export default function Property() {
               </h3>
 
               <p>
+                País: <strong>{property?.country}</strong>
+              </p>
+
+              <p>
+                Estado: <strong>{property?.state}</strong>
+              </p>
+
+              <p>
+                Cidade: <strong>{property?.city}</strong>
+              </p>
+
+              <p>
+                Endereço: <strong>{property?.address}</strong>
+              </p>
+
+              <p>
                 Valor: <strong>{priceFormatted}</strong>
               </p>
               <span>
@@ -103,16 +121,26 @@ export default function Property() {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:justify-start sm:gap-2">
-            <button
-              className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
-              onClick={() => {
-                router.push(`/property/${propertyId}/edit-property`);
-              }}
-            >
-              Editar propriedade
-            </button>
+            {user?.id === property?.ownerId && (
+              <>
+                <button
+                  className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
+                  onClick={() => {
+                    router.push(`/property/${propertyId}/edit-property`);
+                  }}
+                >
+                  Editar propriedade
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-600 p-4 rounded-lg text-white font-semibold mt-8"
+                  onClick={handleDeleteProperty}
+                >
+                  Deletar Contrato
+                </button>
+              </>
+            )}
 
-            {property?.isAvailable && (
+            {user?.id !== property?.ownerId && property?.isAvailable && (
               <button
                 className="bg-brand2 p-4 rounded-lg text-white font-semibold mt-8"
                 onClick={() => {
@@ -122,13 +150,6 @@ export default function Property() {
                 Novo Contrato
               </button>
             )}
-
-            <button
-              className="bg-red-500 hover:bg-red-600 p-4 rounded-lg text-white font-semibold mt-8"
-              onClick={handleDeleteProperty}
-            >
-              Deletar Contrato
-            </button>
           </div>
         </main>
       </Container>
