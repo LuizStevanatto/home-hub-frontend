@@ -91,7 +91,7 @@ function FormLogin() {
 
       <Link
         href="/recovery-password"
-        className="block mt-2 text-sm text-right text-gray2"
+        className="block mt-2 text-sm sm:w-[378px] text-right text-gray2"
       >
         Esqueceu a senha?
       </Link>
@@ -102,11 +102,11 @@ function FormLogin() {
         </FormErrorText>
       )}
 
-      <Button type="submit" className="mt-9" disabled={isLoading}>
+      <Button type="submit" className="mt-9 sm:w-[378px]" disabled={isLoading}>
         Fazer Login
       </Button>
 
-      <p className="mt-9 text-sm text-center text-gray1 font-medium ">
+      <p className="mt-9 text-sm text-center sm:w-[378px] text-gray1 font-medium ">
         Ainda não possui conta?{" "}
         <Link href="/register" className="text-brand1">
           Fazer Cadastro
