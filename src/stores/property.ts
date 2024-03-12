@@ -46,7 +46,6 @@ export const usePropertyStore = create<IUsePropertyStore>(() => ({
 
   async updateProperty(data: IProperty) {
     await api.put(`property/${data.id}`, {
-      id: data.id,
       number: data.number,
       zipCode: data.zipCode,
       state: data.state,
@@ -54,7 +53,7 @@ export const usePropertyStore = create<IUsePropertyStore>(() => ({
       address: data.address,
       name: data.name,
       description: data.description,
-      // isAvailable: data.isAvailable,
+      isAvailable: data.isAvailable,
       price: Number(data.price),
       country: data.country,
       ownerId: data.ownerId
