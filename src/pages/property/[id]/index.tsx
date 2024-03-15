@@ -133,7 +133,7 @@ export default function Property() {
 
         {propertyContracts && propertyContracts.length > 0 && (
           <>
-            <div className="flex flex-col gap-2 p-4 bg-neutral-300 w-full sm:w-[420px] rounded-[8px] space-y-4">
+            <div className="flex flex-col gap-2 p-4 bg-neutral-300 max-h-[336px] w-full sm:w-[420px] sm:max-h-[572px] overflow-y-auto rounded-[8px] space-y-4">
               <h3 className="text-xl mt-2  text-brand1 font-semibold ">
                 Outros contratos dessa propriedade
               </h3>

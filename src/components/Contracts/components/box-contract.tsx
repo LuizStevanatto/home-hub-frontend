@@ -2,7 +2,8 @@ import Button from "@/components/Button";
 import { IContract } from "@/stores/contracts";
 import { useRouter } from "next/router";
 import React from "react";
-import {dateFormat} from "@/utils/date-format";
+import { dateFormat } from "@/utils/date-format";
+import useUserStore from "@/stores/user";
 
 type BoxContractProps = {
   contract: IContract;
@@ -10,8 +11,10 @@ type BoxContractProps = {
 
 export function BoxContract(props: BoxContractProps) {
   const { contract } = props;
+  const { user } = useUserStore();
 
   const router = useRouter();
+  const userId = String(user?.id);
 
   const priceFormat = contract.price.toLocaleString("pt-BR", {
     currency: "BRL",
@@ -57,12 +60,14 @@ export function BoxContract(props: BoxContractProps) {
         </span>
       </div>
 
-      <Button
-        className="mt-6 h-9"
-        onClick={() => router.push(`/contracts/edit-contract/${contract.id}`)}
-      >
-        Editar contrato
-      </Button>
+      {userId === contract.ownerId && (
+        <Button
+          className="mt-6 h-9"
+          onClick={() => router.push(`/contracts/edit-contract/${contract.id}`)}
+        >
+          Editar contrato
+        </Button>
+      )}
     </div>
   );
 }
