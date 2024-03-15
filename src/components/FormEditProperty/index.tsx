@@ -29,7 +29,6 @@ interface ICity {
 }
 
 export function FormEditProperty() {
-  const { user } = useUserStore();
   const [isAvaliable, setIsAvaliable] = useState<boolean>(false);
   const [property, setProperty] = React.useState<IProperty | null>(null);
   const { updateProperty, getProperty } = usePropertyStore();

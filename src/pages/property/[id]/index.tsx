@@ -6,11 +6,10 @@ import { IoLocationOutline } from "react-icons/io5";
 import Container from "@/components/Conateiner";
 import { IProperty, usePropertyStore } from "@/stores/property";
 import { LayoutRoot } from "@/layout/root";
-import { toast } from "react-toastify";
 import useUserStore from "@/stores/user";
 export default function Property() {
   const { user } = useUserStore();
-  const { getProperty, deleteProperty } = usePropertyStore();
+  const { getProperty } = usePropertyStore();
   const [property, setProperty] = useState<IProperty | null>(null);
   const router = useRouter();
   const propertyId = String(router.query.id);
@@ -32,31 +31,6 @@ export default function Property() {
       style: "currency",
       maximumFractionDigits: 0,
     });
-  }
-
-  async function handleDeleteProperty() {
-    try {
-      await deleteProperty(propertyId);
-
-      toast("Propriedade deletada com sucesso!", {
-        position: "top-center",
-        type: "success",
-        autoClose: 5000,
-      });
-
-      router.push("/");
-    } catch (error) {
-      console.log(error);
-
-      toast(
-        "Não foi possível deletar a propriedade. Tente novamente ou entre em contato com o suporte!",
-        {
-          position: "top-center",
-          type: "error",
-          autoClose: 5000,
-        }
-      );
-    }
   }
 
   const priceFormatted = handleFormattedCurrency(property?.price);
@@ -130,12 +104,6 @@ export default function Property() {
                   }}
                 >
                   Editar propriedade
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-600 p-4 rounded-lg text-white font-semibold mt-8"
-                  onClick={handleDeleteProperty}
-                >
-                  Deletar Contrato
                 </button>
               </>
             )}

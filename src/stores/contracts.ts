@@ -72,16 +72,12 @@ export const useContractsStore = create<IUseContractsStore>(() => ({
 
   async updateContract(data: IContract) {
     await api.put(`/contracts/${data.id}`, {
-      id: data.id,
-      propertyId: data.propertyId,
       tentantId: data.tentantId,
       ownerId: data.ownerId,
       startDate: data.startDate,
       endDate: data.endDate,
       isActive: data.isActive,
       price: data.price,
-      created_at: data.createdAt,
-      updated_at: data.updatedAt
     })
   },
 

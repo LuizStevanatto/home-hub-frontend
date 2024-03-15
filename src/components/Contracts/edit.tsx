@@ -14,11 +14,12 @@ import useUserStore from "@/stores/user";
 import React from "react";
 import { toast } from "react-toastify";
 import { dateFormat } from "@/utils/date-format";
+import ModalDeleteContract from "./components/model-delete-contract";
 
 function EditContract() {
   const router = useRouter();
   const [contract, setContract] = React.useState<IContract | null>(null);
-
+  const [isActive, setIsActive] = React.useState<boolean>(false);
   const { updateContract, getContract, deleteContract } = useContractsStore();
   const { user } = useUserStore();
 
@@ -33,20 +34,15 @@ function EditContract() {
 
   const contractId = String(router.query.contractId);
 
-  const handleCheckRadio = (value: React.ChangeEvent<HTMLInputElement>) => {
-    setValue("isActive", value.target.checked);
-  };
-
   async function handleSubmitData(data: FormRegisterProps) {
     try {
       await updateContract({
         ...contract,
         startDate: data.startDate,
         endDate: data.endDate,
-        isActive: data.isActive,
+        isActive: isActive,
         price: Number(data.price),
         tentantId: String(user?.id),
-        updatedAt: new Date(),
       });
 
       toast("Contrato atualizado", {
@@ -106,6 +102,7 @@ function EditContract() {
     setValue("startDate", newStartDate);
     setValue("endDate", newEndDate);
     setValue("isActive", contract?.isActive || false);
+    setIsActive(contract?.isActive || false);
     setValue("price", String(contract?.price) || "");
   };
 
@@ -147,7 +144,8 @@ function EditContract() {
         <FormLabel htmlFor="isActive">Ativo?</FormLabel>
         <Checkbox
           {...register("isActive")}
-          onChange={handleCheckRadio}
+          isChecked={isActive}
+          onChange={(e) => setIsActive(!isActive)}
           className="-mt-[0.45rem]"
         />
         {errors.isActive && (
@@ -158,13 +156,10 @@ function EditContract() {
       <Button type="submit" className="w-[378px]">
         Enviar
       </Button>
-      <Button
-        type="button"
-        className="bg-red-500 hover:bg-red-600 w-[378px]"
-        onClick={handleContractDelete}
-      >
-        Excluir Contrato
-      </Button>
+
+      {user?.id === contract?.ownerId && (
+        <ModalDeleteContract contractId={String(contract?.id)} />
+      )}
     </Form>
   );
 }
