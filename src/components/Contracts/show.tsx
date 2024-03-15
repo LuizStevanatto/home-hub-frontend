@@ -1,10 +1,8 @@
 import React from "react";
 import { IContract, useContractsStore } from "@/stores/contracts";
-import { useRouter } from "next/router";
 import { BoxContract } from "./components/box-contract";
 
 function ShowContracts() {
-  const router = useRouter();
   const [contracts, setContracts] = React.useState<IContract[] | null>(null);
   const [activeContracts, setActiveContracts] = React.useState<
     IContract[] | null

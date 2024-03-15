@@ -63,6 +63,14 @@ function UserMenuDesktop({
           Contratos
         </Link>
 
+        <Link
+          href="/contracts/my-contracts"
+          className="py-3 px-4 hover:bg-gray7 flex items-center gap-3"
+        >
+          <FaFileContract size={18} />
+          Meus Contratos
+        </Link>
+
         <button
           type="button"
           className="py-3 px-4 hover:bg-gray7 flex items-center gap-3"

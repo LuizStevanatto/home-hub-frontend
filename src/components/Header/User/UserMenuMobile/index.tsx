@@ -6,6 +6,7 @@ import {
 } from "react-icons/hi2";
 import { RxExit } from "react-icons/rx";
 import MenuHamb from "@/components/MenuHamb";
+import { FaFileContract } from "react-icons/fa";
 
 interface IUserMenuMobile {
   handleLogout: () => void;
@@ -35,6 +36,22 @@ function UsermMenuMobile({ handleLogout }: IUserMenuMobile) {
         >
           <BsHouseAdd size={18} />
           Anunciar
+        </Link>
+
+        <Link
+          href="/contracts"
+          className="py-3 px-4 hover:bg-gray7 flex items-center gap-3"
+        >
+          <FaFileContract size={18} />
+          Contratos
+        </Link>
+
+        <Link
+          href="/contracts/my-contracts"
+          className="py-3 px-4 hover:bg-gray7 flex items-center gap-3"
+        >
+          <FaFileContract size={18} />
+          Meus Contratos
         </Link>
 
         <button
