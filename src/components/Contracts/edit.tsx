@@ -37,9 +37,10 @@ function EditContract() {
   async function handleSubmitData(data: FormRegisterProps) {
     try {
       await updateContract({
-        ...contract,
         startDate: data.startDate,
         endDate: data.endDate,
+        propertyId: contract?.propertyId,
+        ownerId: contract?.ownerId,
         isActive: isActive,
         price: Number(data.price),
         tentantId: String(user?.id),

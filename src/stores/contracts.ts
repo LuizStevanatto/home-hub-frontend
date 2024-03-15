@@ -71,14 +71,7 @@ export const useContractsStore = create<IUseContractsStore>(() => ({
   },
 
   async updateContract(data: IContract) {
-    await api.put(`/contracts/${data.id}`, {
-      tentantId: data.tentantId,
-      ownerId: data.ownerId,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      isActive: data.isActive,
-      price: data.price,
-    })
+    await api.put(`/contracts/${data.id}`, data)
   },
 
   async deleteContract(id: string) {
