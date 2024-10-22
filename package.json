@@ -1,0 +1,43 @@
+{
+  "name": "homehub",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.6.1",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.1.0",
+    "@types/node": "18.16.0",
+    "@types/react": "18.0.38",
+    "@types/react-dom": "18.0.11",
+    "autoprefixer": "10.4.14",
+    "axios": "^1.3.6",
+    "date-fns": "^3.3.1",
+    "eslint": "8.39.0",
+    "eslint-config-next": "13.3.1",
+    "framer-motion": "^10.12.9",
+    "next": "13.3.1",
+    "nookies": "^2.5.2",
+    "postcss": "8.4.23",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
+    "react-icons": "^4.8.0",
+    "react-toastify": "^9.1.2",
+    "remask": "^1.2.2",
+    "tailwindcss": "3.3.1",
+    "typescript": "5.0.4",
+    "zod": "^3.21.4",
+    "zustand": "^4.3.7"
+  },
+  "devDependencies": {
+    "@types/react-icons": "^3.0.0",
+    "@types/react-toastify": "^4.1.0"
+  }
+}
